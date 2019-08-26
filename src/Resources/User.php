@@ -2,7 +2,7 @@
 
 namespace Viauco\Messenger\Resources;
 
-class Discussion extends Item
+class User extends Item
 {
     /**
      * Transform the resource into an array.
@@ -13,10 +13,9 @@ class Discussion extends Item
     public function toArray($request)
     {
         return [
-            'id' => $this->_id,
-            'subject' => $this->subject,
-            'participations' => Participation::collection($this->participations),
-            //'creator' => new User( $this->creator ),
+            'id' => $this->id,
+            'name' => $this->name,
+            'email' => $this->email,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

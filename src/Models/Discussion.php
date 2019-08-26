@@ -68,9 +68,6 @@ class Discussion extends Model implements DiscussionContract
      *
      * @var array
      */
-    protected $casts = [
-        'id' => 'string',
-    ];
 
     /* -----------------------------------------------------------------
      |  Constructor

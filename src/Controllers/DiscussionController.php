@@ -51,19 +51,27 @@ class DiscussionController extends Controller
         }
     }
 
-    public function getOrCreate($userId, $targetId)
+    public function getOrCreate($sourceId, $targetId)
     {
         try
         {
-            $key = $userId . '_' . $targetId;
+            $ids = [$sourceId, $targetId];
 
-            $discussion = Discussion::firstOrCreate([
+            asort( $ids );
+            
+            $key = implode('_', $ids);
+
+            $discussion = Discussion::updateOrCreate([
                 'key' => $key
             ]);
-            
-            $discussion->subject = microtime(true);
 
-            $discussion->save();
+            $discussion->subject = $key;
+
+            $userClass = config('messenger.users.model');
+
+            $users = $userClass::whereIn(( new $userClass )->getKeyName(), $ids )->get();
+
+            $discussion->addParticipants($users);
 
             event( new \Viauco\Messenger\Events\DiscussionCreate( request()->all(), $discussion ) );
 

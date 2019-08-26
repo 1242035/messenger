@@ -4,7 +4,7 @@ Route::group(['prefix' => '_conversations', 'namespace' => 'Viauco\Messenger\Con
 {
     Route::group(['prefix' => 'discussions'], function () 
     {
-        Route::get('/{memberId}/{targetId}', ['as' => 'viauco_messenger_discussions_getOrCreate', 'uses' => 'DiscussionController@getOrCreate']);
+        Route::get('/{sourceId}/{targetId}', ['as' => 'viauco_messenger_discussions_getOrCreate', 'uses' => 'DiscussionController@getOrCreate']);
         Route::get('/{discussionId}', ['as' => 'viauco_messenger_discussions_get', 'uses' => 'DiscussionController@get']);
         Route::put('/{discussionId}', ['as' => 'viauco_messenger_discussions_put', 'uses' => 'DiscussionController@put']);
         Route::get('/', ['as' => 'viauco_messenger_discussions_index', 'uses' => 'DiscussionController@index']);

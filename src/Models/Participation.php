@@ -29,7 +29,7 @@ class Participation extends Model implements ParticipantContract
 
     use SoftDeletes;
 
-    protected $collection = 'discussions';
+    protected $collection = 'participations';
 
     /* -----------------------------------------------------------------
      |  Properties
