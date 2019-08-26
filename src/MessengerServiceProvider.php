@@ -33,6 +33,7 @@ class MessengerServiceProvider extends PackageServiceProvider
         parent::register();
 
         $this->registerConfig();
+        
         $this->bindModels();
         
     }
@@ -82,12 +83,14 @@ class MessengerServiceProvider extends PackageServiceProvider
             'participations' => Contracts\Participation::class,
         ];
 
-        foreach ($bindings as $key => $contract) {
+        foreach ($bindings as $key => $contract) 
+        {
             $this->bind($contract, $config->get("{$this->package}.{$key}.model"));
         }
     }
 
-    public function loadRoute() {
+    public function loadRoute() 
+    {
         $this->loadRoutesFrom(__DIR__.'/../routes/routes.php');
     }
 }

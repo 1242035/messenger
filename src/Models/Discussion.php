@@ -11,7 +11,7 @@ use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
-/**
+/** 
  * Class     Discussion
  *
  * @package  Viauco\Messenger\Models
@@ -42,6 +42,8 @@ class Discussion extends Model implements DiscussionContract
 
     use SoftDeletes;
 
+    protected $collection = 'discussions';
+
     /* -----------------------------------------------------------------
      |  Properties
      | -----------------------------------------------------------------
@@ -52,7 +54,7 @@ class Discussion extends Model implements DiscussionContract
      *
      * @var array
      */
-    protected $fillable = ['subject'];
+    protected $fillable = ['subject','key'];
 
     /**
      * The attributes that should be mutated to dates.
@@ -67,7 +69,7 @@ class Discussion extends Model implements DiscussionContract
      * @var array
      */
     protected $casts = [
-        'id' => 'integer',
+        'id' => 'string',
     ];
 
     /* -----------------------------------------------------------------

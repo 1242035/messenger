@@ -1,5 +1,4 @@
 <?php
-
 namespace Viauco\Messenger\Controllers;
 
 class ParticipationController extends Controller

@@ -1,7 +1,8 @@
 <?php
 namespace Viauco\Messenger\Models;
 
-use Illuminate\Database\Eloquent\Model as Eloquent;
+//use Illuminate\Database\Eloquent\Model as Eloquent;
+use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 use Viauco\Messenger\Traits\PrefixedModel;
 
 /**
@@ -12,6 +13,11 @@ use Viauco\Messenger\Traits\PrefixedModel;
 abstract class Model extends Eloquent
 {
     use PrefixedModel;
+
+    protected $connection = 'mongodb';
+
+    public $incrementing = false;
+    
     /* -----------------------------------------------------------------
      |  Constructor
      | -----------------------------------------------------------------

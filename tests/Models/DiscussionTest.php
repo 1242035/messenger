@@ -639,4 +639,5 @@ class DiscussionTest extends TestCase
         static::assertInstanceOf(Collection::class, $messages);
         static::assertCount(0, $messages);
     }
+    
 }

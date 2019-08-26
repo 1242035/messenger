@@ -43,7 +43,9 @@ class CreateMessagesTable extends Migration
             $table->unsignedInteger('discussion_id');
             $table->morphs(config('messenger.users.morph', 'participable'));
             $table->text('body');
+            $table->string('type')->default('text');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 }

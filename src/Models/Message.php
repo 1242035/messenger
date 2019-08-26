@@ -2,7 +2,7 @@
 namespace Viauco\Messenger\Models;
 
 use Viauco\Messenger\Contracts\Message as MessageContract;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * Class     Message
  *
@@ -24,6 +24,9 @@ use Viauco\Messenger\Contracts\Message as MessageContract;
  */
 class Message extends Model implements MessageContract
 {
+    use SoftDeletes;
+
+    protected $collection = 'messages';
     /* -----------------------------------------------------------------
      |  Properties
      | -----------------------------------------------------------------
@@ -44,17 +47,24 @@ class Message extends Model implements MessageContract
     protected $fillable = [
         'discussion_id',
         'body',
+        'type'
     ];
 
+     /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
     /**
      * The attributes that should be cast to native types.
      *
      * @var array
      */
     protected $casts = [
-        'id'              => 'integer',
-        'discussion_id'   => 'integer',
-        'participable_id' => 'integer',
+        'id'              => 'string',
+        'discussion_id'   => 'string',
+        'participable_id' => 'string',
     ];
 
     /* -----------------------------------------------------------------

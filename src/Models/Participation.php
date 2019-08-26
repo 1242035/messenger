@@ -29,6 +29,8 @@ class Participation extends Model implements ParticipantContract
 
     use SoftDeletes;
 
+    protected $collection = 'discussions';
+
     /* -----------------------------------------------------------------
      |  Properties
      | -----------------------------------------------------------------
@@ -59,9 +61,9 @@ class Participation extends Model implements ParticipantContract
      * @var array
      */
     protected $casts = [
-        'id'              => 'integer',
-        'discussion_id'   => 'integer',
-        'participable_id' => 'integer',
+        'id'              => 'string',
+        'discussion_id'   => 'string',
+        'participable_id' => 'string',
     ];
 
     /* -----------------------------------------------------------------

@@ -1,3 +1,4 @@
+
 <?php namespace Viauco\Messenger\Tests\Models;
 
 use Viauco\Messenger\Models\Discussion;

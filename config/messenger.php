@@ -8,7 +8,7 @@ return [
      */
 
     'database' => [
-        'connection' => env('DB_CONNECTION', 'mysql'),
+        'connection' => env('DB_CONNECTION', 'mongodb'),
 
         'prefix'     => null,
     ],
@@ -39,4 +39,13 @@ return [
         'model' => Viauco\Messenger\Models\Message::class
     ],
 
+    /*
+        events
+    */
+    'events' => [
+        'public' => [
+            'channel' => '_conversations',
+            'name'    => '_conversations'
+        ]
+    ]
 ];

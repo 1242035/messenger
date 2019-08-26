@@ -1,4 +1,5 @@
-<?php namespace Viauco\Messenger\Tests\Models;
+<?php 
+namespace Viauco\Messenger\Tests\Models;
 
 use Viauco\Messenger\Models\Discussion;
 use Viauco\Messenger\Models\Participation;

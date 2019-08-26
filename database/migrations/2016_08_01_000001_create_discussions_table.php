@@ -40,6 +40,7 @@ class CreateDiscussionsTable extends Migration
     {
         $this->createSchema(function (Blueprint $table) {
             $table->increments('id');
+            $table->string('key');
             $table->string('subject')->nullable();
             $table->timestamps();
             $table->softDeletes();
