@@ -15,7 +15,7 @@ class Discussion extends Item
         return [
             'id' => $this->_id,
             'subject' => $this->subject,
-            'participations' => Participation::collection($this->participations),
+            'members' => Participation::collection($this->participations),
             //'creator' => new User( $this->creator ),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

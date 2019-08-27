@@ -6,22 +6,8 @@ use Viauco\Messenger\Resources\Discussion as DiscussionItemResource;
 
 class DiscussionController extends Controller
 {
-    public function index()
-    {
-        try
-        {
-            $discussions = Discussion::all();
-            return $this->_success( DiscussionItemResource::collection( $discussions ) );
-        }
-        catch(\Exception $e)
-        {
-            logger()->error( $e );
-
-            return $this->_error($e);
-        }
-    }
-
-    public function get($discussionId)
+    /* SECTION discussion */
+    public function discussionGet($discussionId)
     {
         try
         {
@@ -36,7 +22,7 @@ class DiscussionController extends Controller
         }
     }
 
-    public function put(Discussion $discussion)
+    public function discussionPut(Discussion $discussion)
     {
         try
         {
@@ -51,7 +37,7 @@ class DiscussionController extends Controller
         }
     }
 
-    public function getOrCreate($sourceId, $targetId)
+    public function discussionGetOrCreate($sourceId, $targetId)
     {
         try
         {
@@ -83,10 +69,5 @@ class DiscussionController extends Controller
 
             return $this->_error($e);
         }
-    }
-
-    public function users($conversionId)
-    {
-
     }
 }

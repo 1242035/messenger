@@ -1,9 +1,7 @@
 <?php 
 namespace Viauco\Messenger\Models;
 
-use Viauco\Messenger\Contracts\Discussion as DiscussionContract;
-use Viauco\Messenger\Contracts\Message as MessageContract;
-use Viauco\Messenger\Contracts\Participation as ParticipationContract;
+use Viauco\Messenger\Contracts\Notification as NotificationContract;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -33,7 +31,7 @@ use Illuminate\Support\Collection;
  * @method static  \Illuminate\Database\Eloquent\Builder|static  withParticipations()
  * @method static  \Illuminate\Database\Eloquent\Builder|static  forUserWithNewMessages(\Illuminate\Database\Eloquent\Model $participable)
  */
-class Discussion extends Model implements DiscussionContract
+class Notification extends Model implements NotificationContract
 {
     /* -----------------------------------------------------------------
      |  Traits
@@ -54,7 +52,7 @@ class Discussion extends Model implements DiscussionContract
      *
      * @var array
      */
-    protected $fillable = ['subject','key'];
+    protected $fillable = ['subject','body'];
 
     /**
      * The attributes that should be mutated to dates.
@@ -82,12 +80,12 @@ class Discussion extends Model implements DiscussionContract
     public function __construct(array $attributes = [])
     {
         $this->setTable(
-            config('messenger.discussions.table', 'discussions')
+            config('messenger.notifications.table', 'notifications')
         );
 
-        $this->connection = config('messenger.discussions.connection','mongodb');
+        $this->connection = config('messenger.notifications.connection','mongodb');
 
-        $this->collection = config('messenger.discussions.table', 'discussions');
+        $this->collection = config('messenger.notifications.table','notifications');
 
         parent::__construct($attributes);
     }

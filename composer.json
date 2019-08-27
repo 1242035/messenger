@@ -7,7 +7,9 @@
     "type": "library",
     "license": "MIT",
     "require": {
-        "php":               ">=7.1.3"
+        "php":               ">=7.1.3",
+        "laravel/framework": "5.8.*",
+        "jenssegers/mongodb": "^3.5"
     },
     "require-dev": {
         "orchestra/testbench": "~3.8.0",

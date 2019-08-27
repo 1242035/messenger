@@ -16,9 +16,7 @@ abstract class Model extends Eloquent
 
     protected $connection = 'mongodb';
 
-    public $incrementing = true;
-    
-    public $primaryKey = '_id';
+    protected $collection = 'table';
 
     /* -----------------------------------------------------------------
      |  Constructor

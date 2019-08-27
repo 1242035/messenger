@@ -83,6 +83,10 @@ class Message extends Model implements MessageContract
             config('messenger.messages.table', 'messages')
         );
 
+        $this->connection = config('messenger.messages.connection','mongodb');
+
+        $this->collection = config('messenger.messages.table','messages');
+
         parent::__construct($attributes);
     }
 

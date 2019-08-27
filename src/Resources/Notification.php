@@ -1,8 +1,7 @@
 <?php
-
 namespace Viauco\Messenger\Resources;
 
-class Participation extends Item
+class Notification extends Item
 {
     /**
      * Transform the resource into an array.
@@ -13,9 +12,9 @@ class Participation extends Item
     public function toArray($request)
     {
         return [
-            'id' => $this->_id,
-            'user' => new User($this->participable),
-            'discussion_id' => $this->discussion_id,
+            'id'         => $this->_id,
+            'subject'    => $this->subject,
+            'body'       => $this->body,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
