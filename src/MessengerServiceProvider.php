@@ -8,6 +8,7 @@ namespace Viauco\Messenger;
  */
 class MessengerServiceProvider extends PackageServiceProvider
 {
+    use EventMap;
     /* -----------------------------------------------------------------
      |  Properties
      | -----------------------------------------------------------------
@@ -36,6 +37,8 @@ class MessengerServiceProvider extends PackageServiceProvider
         
         $this->bindModels();
         
+        $this->registerEvents();
+
     }
 
     /**
@@ -92,5 +95,17 @@ class MessengerServiceProvider extends PackageServiceProvider
     public function loadRoute() 
     {
         $this->loadRoutesFrom(__DIR__.'/../routes/routes.php');
+    }
+
+    protected function registerEvents()
+    {
+        $events = $this->app->make(Dispatcher::class);
+        foreach ($this->events as $event => $listeners) 
+        {
+            foreach ($listeners as $listener) 
+            {
+                $events->listen($event, $listener);
+            }
+        }
     }
 }

@@ -1,12 +1,36 @@
 <?php
 namespace Viauco\Messenger\Controllers;
 
-use Viauco\Messenger\Models\Participation;
+use Viauco\Messenger\Models\Discussion;
+use Viauco\Messenger\Resources\Discussion as DiscussionItemResource;
 use Viauco\Messenger\Resources\Participation as ParticipationItemResource;
+use Viauco\Messenger\Resources\ParticipationCollection;
 
 class ParticipationController extends Controller
 {
-    /* SECTION discussion */
+    public function participationGet($discussionId)
+    {
+        try
+        {
+            $params = request()->all();
+            
+            if( ! isset( $params['per_page'] ) ){ $params['per_page'] = config('messenger.messages.piginate.limit'); }
+
+            $discussions = Discussion::notDeleted()->findOrFail($discussionId);
+            
+            $participations = $discussions->participations()->notDeleted()->paginate($params['per_page']);
+            
+            return $this->_success( ( new ParticipationCollection( $participations ) ) );
+            
+        }
+        catch(\Exception $e)
+        {
+            logger()->error( $e );
+
+            return $this->_error($e);
+        }
+    }
+    
     public function participationPost($discussionId, $memberId)
     {
         try
@@ -15,11 +39,13 @@ class ParticipationController extends Controller
             
             $user = $userClass::findOrFail($memberId);
 
-            $discussions = Discussion::findOrFail($discussionId);
+            $discussion = Discussion::findOrFail($discussionId);
 
-            $discussions->addParticipant($user);
+            $discussion->addParticipant($user);
 
-            return $this->_success( new DiscussionItemResource( $discussions ) );
+            event( new \Viauco\Messenger\Events\ParticipationAdd( request()->all(), $discussion, $user ) );
+
+            return $this->_success( new DiscussionItemResource( $discussion ) );
         }
         catch(\Exception $e)
         {
@@ -37,11 +63,13 @@ class ParticipationController extends Controller
             
             $user = $userClass::findOrFail($memberId);
 
-            $discussions = Discussion::findOrFail($discussionId);
+            $discussion = Discussion::findOrFail($discussionId);
 
-            $discussions->removeParticipant($user);
+            $discussion->removeParticipant($user);
 
-            return $this->_success( new DiscussionItemResource( $discussions ) );
+            event( new \Viauco\Messenger\Events\ParticipationRemove( request()->all(), $discussion, $user ) );
+
+            return $this->_success( new DiscussionItemResource( $discussion ) );
         }
         catch(\Exception $e)
         {

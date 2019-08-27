@@ -4,6 +4,7 @@ namespace Viauco\Messenger\Controllers;
 use Viauco\Messenger\Models\Discussion;
 use Viauco\Messenger\Models\Message;
 use Viauco\Messenger\Resources\Message as MessageItemResource;
+use Viauco\Messenger\Resources\MessageCollection;
 
 class MessageController extends Controller
 {
@@ -13,14 +14,14 @@ class MessageController extends Controller
         try
         {
             $params = request()->all();
+            
+            if( ! isset( $params['per_page'] ) ){ $params['per_page'] = config('messenger.messages.piginate.limit'); }
 
-            if( ! isset( $params['offset'] ) ){ $params['offset'] = 0; }
-            if( ! isset( $params['limit'] ) ){ $params['limit'] = config('messenger.messages.piginate.limit'); }
+            $discussions = Discussion::findOrFail($discussionId)->notDeleted();
 
-            $discussions = Discussion::findOrFail($discussionId);
+            $messages = $discussions->messages()->notDeleted()->paginate($params['per_page']);
 
-            $messages = $discussions->messages()->take($params['limit'])->skip($params['offset']);
-            return $this->_success( MessageItemResource::collection( $messages ) );
+            return $this->_success( new MessageCollection( $messages ) );
         }
         catch(\Exception $e)
         {
@@ -34,11 +35,15 @@ class MessageController extends Controller
     {
         try
         {
-            $discussions = Discussion::findOrFail($discussionId);
+            $discussion = Discussion::findOrFail($discussionId);
 
-            $message = request()->except('discussionId');
+            $params = request()->except('discussionId');
+
+            $message = Message::create($params);
 
             $discussion->messages()->save( $message );
+
+            event( new \Viauco\Messenger\Events\MessageAdd( request()->all(), $message ) );
 
             return $this->_success( new MessageItemResource( $message ) );
         }
@@ -70,12 +75,15 @@ class MessageController extends Controller
     {
         try
         {
+
             $message = Message::findOrFail($messageId);
 
-            $params = request()->except('discussionId');
+            $params = request()->all();
 
-            $message->save( $params );
+            $message->update( $params );
             
+            event( new \Viauco\Messenger\Events\MessageUpdate( request()->all(), $message ) );
+
             return $this->_success( new MessageItemResource( $message ) );
         }
         catch(\Exception $e)
@@ -94,6 +102,8 @@ class MessageController extends Controller
 
             $message->delete();
             
+            event( new \Viauco\Messenger\Events\MessageRemove( request()->all(), $message ) );
+
             return $this->_success( new MessageItemResource( $message ) );
         }
         catch(\Exception $e)

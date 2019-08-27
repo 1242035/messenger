@@ -22,22 +22,25 @@ abstract class Controller extends BaseController
 
     protected function _success($data)
     {
-        return response()->json([
+        $response = [
             'code'    => 200,
             'type'    => 'success',
             'message' => 'Success',
             'data'    => $data
-        ]);
+        ];
+        //if( isset( $data['meta'])){ $response['meta'] = $data['meta']; }
+        //if( isset( $data['links'])){ $response['links'] = $data['links']; }
+        return response()->json( $response );
     }
 
-    protected function _error($code = 500, $type = 'error', $message='error', $data = null)
+    protected function _error($error = null, $code = 500, $type = 'error', $message='error')
     {
         return response()->json([
             'code'    => $code,
             'type'    => $type,
             'message' => $message,
             'params'  => request()->all(),
-            'data'    => $data
+            'error'   => $error
         ]);
     }
 }

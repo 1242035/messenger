@@ -8,8 +8,11 @@
     "license": "MIT",
     "require": {
         "php":               ">=7.1.3",
-        "laravel/framework": "5.8.*",
-        "jenssegers/mongodb": "^3.5"
+        "laravel/framework": "*",
+        "jenssegers/mongodb": "*",
+        "beyondcode/laravel-websockets": "*",
+        "pusher/pusher-php-server": "~3.0",
+        "react/dns": "^0.4.19"
     },
     "require-dev": {
         "orchestra/testbench": "~3.8.0",

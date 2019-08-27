@@ -3,6 +3,7 @@ namespace Viauco\Messenger\Models;
 
 //use Illuminate\Database\Eloquent\Model as Eloquent;
 use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
+use Illuminate\Notifications\Notifiable;
 use Viauco\Messenger\Traits\PrefixedModel;
 
 /**
@@ -12,7 +13,7 @@ use Viauco\Messenger\Traits\PrefixedModel;
  */
 abstract class Model extends Eloquent
 {
-    use PrefixedModel;
+    use PrefixedModel, Notifiable;
 
     protected $connection = 'mongodb';
 
@@ -34,5 +35,18 @@ abstract class Model extends Eloquent
         $this->setPrefix(config('messenger.database.prefix'));
 
         parent::__construct($attributes);
+    }
+
+    /**
+     * Scope Deleted associated with.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Model    $participable
+     *
+     * @return \Illuminate\Database\Eloquent\Builder|static
+     */
+    public function scopeNotDeleted($query)
+    {
+        return $query->whereNull('deleted_at');
     }
 }

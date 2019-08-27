@@ -2,7 +2,7 @@
 namespace Viauco\Messenger\Controllers;
 
 use Viauco\Messenger\Models\Notification;
-use Viauco\Messenger\Resources\Notification as Resource;
+use Viauco\Messenger\Resources\NotificationCollection as Resource;
 
 class NotificationController extends Controller
 {
@@ -10,11 +10,10 @@ class NotificationController extends Controller
     {
         $params = request()->all();
         
-        if( ! isset( $params['offset'] ) ){ $params['offset'] = 0; }
-        if( ! isset( $params['limit'] ) ){ $params['limit'] = config('messenger.notifications.piginate.limit'); }
+        if( ! isset( $params['per_page'] ) ){ $params['per_page'] = config('messenger.notifications.piginate.limit'); }
 
-        $collections = Notification::take($params['limit'])->skip($params['offset']);
+        $collections = Notification::notDeleted()->paginate($params['per_page']);
 
-        return $this->_success(Resource::collection( $collections) );
+        return $this->_success( new NotificationCollection( $collections) );
     }
 }

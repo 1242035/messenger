@@ -11,7 +11,7 @@ class DiscussionController extends Controller
     {
         try
         {
-            $discussions = Discussion::findOrFail($discussionId);
+            $discussions = Discussion::findOrFail($discussionId)->notDeleted();
             return $this->_success( new DiscussionItemResource( $discussions ) );
         }
         catch(\Exception $e)
@@ -27,6 +27,9 @@ class DiscussionController extends Controller
         try
         {
             $discussion->save();
+
+            event( new \Viauco\Messenger\Events\DiscussionUpdate( request()->all(), $discussion ) );
+            
             return $this->_success( new DiscussionItemResource( $discussions ) );
         }
         catch(\Exception $e)
