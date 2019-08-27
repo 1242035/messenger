@@ -1,6 +1,8 @@
 <?php
 namespace Viauco\Messenger\Events;
 
+use Illuminate\Broadcasting\PresentChannel;
+
 class Message extends Base
 {
     public $request;
@@ -11,5 +13,15 @@ class Message extends Base
     {
         $this->request    = $request;
         $this->message    = $message;
+    }
+
+    public function broadcastOn()
+    {
+        return new PresentChannel( '_messages');
+    }
+
+    public function broadcastAs()
+    {
+        return '_messages';
     }
 }

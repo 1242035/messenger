@@ -43,7 +43,7 @@ class MessageController extends Controller
 
             $discussion->messages()->save( $message );
 
-            event( new \Viauco\Messenger\Events\MessageAdd( request()->all(), $message ) );
+            event( new \Viauco\Messenger\Events\MessageCreate( request()->all(), $message ) );
 
             return $this->_success( new MessageItemResource( $message ) );
         }

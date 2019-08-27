@@ -7,6 +7,7 @@
     "type": "library",
     "license": "MIT",
     "require": {
+        "beyondcode/laravel-websockets": "^1.2",
         "php":               ">=7.1.3",
         "laravel/framework": "*",
         "jenssegers/mongodb": "*"
