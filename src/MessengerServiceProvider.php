@@ -6,6 +6,8 @@ namespace Viauco\Messenger;
  *
  * @package  Viauco\Messenger
  */
+use Illuminate\Contracts\Events\Dispatcher;
+
 class MessengerServiceProvider extends PackageServiceProvider
 {
     use EventMap;
