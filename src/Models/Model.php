@@ -3,7 +3,7 @@ namespace Viauco\Messenger\Models;
 
 //use Illuminate\Database\Eloquent\Model as Eloquent;
 use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
-use Illuminate\Notifications\Notifiable;
+use Viauco\Messenger\Traits\Notifiable;
 use Viauco\Messenger\Traits\PrefixedModel;
 
 /**

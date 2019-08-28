@@ -20,48 +20,5 @@ namespace Viauco\Messenger\Contracts;
  */
 interface Notification
 {
-    /* -----------------------------------------------------------------
-     |  Relationships
-     | -----------------------------------------------------------------
-     */
-
-    /**
-     * Discussion relationship.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function discussion();
-
-    /**
-     * User/Author relationship (alias).
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function author();
-
-    /**
-     * Participable relationship.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
-     */
-    public function participable();
-
-    /**
-     * Participations relationship.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function participations();
-
-    /* -----------------------------------------------------------------
-     |  Getters & Setters
-     | -----------------------------------------------------------------
-     */
-
-    /**
-     * Recipients of this message.
-     *
-     * @return \Illuminate\Database\Eloquent\Collection
-     */
-    public function getRecipientsAttribute();
+    
 }

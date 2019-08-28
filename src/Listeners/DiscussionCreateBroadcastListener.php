@@ -15,8 +15,12 @@ class DiscussionCreateBroadcastListener extends Base
      */
     public function handle(DiscussionCreate $event)
     {
-        logger()->info('DiscussionCreateListener start');
-        broadcast( $event );
-        logger()->info('DiscussionCreateListener end');
+        //logger()->debug('DiscussionCreateListener start');
+        
+        $notify = new \Viauco\Messenger\Notifications\Discussion( $event );
+
+        $event->discussion->notify( $notify );
+
+        //logger()->debug('DiscussionCreateListener end');
     }
 }

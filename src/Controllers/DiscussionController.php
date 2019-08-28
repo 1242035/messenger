@@ -43,7 +43,8 @@ class DiscussionController extends Controller
     public function discussionGetOrCreate($sourceId, $targetId)
     {
         try
-        {
+        {            
+
             $ids = [$sourceId, $targetId];
 
             asort( $ids );

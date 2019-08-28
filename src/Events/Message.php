@@ -1,7 +1,7 @@
 <?php
 namespace Viauco\Messenger\Events;
 
-use Illuminate\Broadcasting\PresentChannel;
+use Illuminate\Broadcasting\PresenceChannel;
 
 class Message extends Base
 {
@@ -17,7 +17,7 @@ class Message extends Base
 
     public function broadcastOn()
     {
-        return new PresentChannel( '_messages');
+        return new PresenceChannel( '_messages_'. $this->message->discussion->getKey() );
     }
 
     public function broadcastAs()

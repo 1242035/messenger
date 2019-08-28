@@ -79,9 +79,6 @@ class Message extends Model implements MessageContract
      */
     public function __construct(array $attributes = [])
     {
-        $this->setTable(
-            config('messenger.messages.table', 'messages')
-        );
 
         $this->connection = config('messenger.messages.connection','mongodb');
 

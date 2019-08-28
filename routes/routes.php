@@ -26,3 +26,5 @@ Route::group(['prefix' => '_conversations', 'namespace' => 'Viauco\Messenger\Con
         Route::get('/', ['as' => 'viauco_messenger_notifications_index', 'uses' => 'NotificationController@index']);
     });
 });
+
+\Viauco\Messenger\Socket\WebSocketsRouter::webSocket( config('websockets.path') , \Viauco\Messenger\Socket\SocketHandler::class);

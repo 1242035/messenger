@@ -6,11 +6,9 @@ namespace Viauco\Messenger;
  *
  * @package  Viauco\Messenger
  */
-use Illuminate\Contracts\Events\Dispatcher;
 
 class MessengerServiceProvider extends PackageServiceProvider
 {
-    use EventMap;
     /* -----------------------------------------------------------------
      |  Properties
      | -----------------------------------------------------------------
@@ -101,13 +99,6 @@ class MessengerServiceProvider extends PackageServiceProvider
 
     protected function registerEvents()
     {
-        $events = $this->app->make(Dispatcher::class);
-        foreach ($this->events as $event => $listeners) 
-        {
-            foreach ($listeners as $listener) 
-            {
-                $events->listen($event, $listener);
-            }
-        }
+        $this->app->register(PackageEventServiceProvider::class);
     }
 }

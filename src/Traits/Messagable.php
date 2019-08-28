@@ -1,5 +1,4 @@
 <?php
-
 namespace Viauco\Messenger\Traits;
 
 use Viauco\Messenger\Models;

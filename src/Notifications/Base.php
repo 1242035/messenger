@@ -10,16 +10,7 @@ class Base extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    /**
-     * Create a new notification instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
+    protected $data;
     /**
      * Get the notification's delivery channels.
      *
@@ -30,7 +21,6 @@ class Base extends Notification implements ShouldQueue
     {
         return ['database'];
     }
-
     /**
      * Get the array representation of the notification.
      *
@@ -39,6 +29,6 @@ class Base extends Notification implements ShouldQueue
      */
     public function toArray($notifiable)
     {
-        return (array)$notifiable;
+        return (array)$this->data;
     }
 }

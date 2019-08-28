@@ -81,9 +81,9 @@ class Discussion extends Model implements DiscussionContract
      */
     public function __construct(array $attributes = [])
     {
-        $this->setTable(
+        /*$this->setTable(
             config('messenger.discussions.table', 'discussions')
-        );
+        );*/
 
         $this->connection = config('messenger.discussions.connection','mongodb');
 

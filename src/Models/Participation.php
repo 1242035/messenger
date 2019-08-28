@@ -78,9 +78,6 @@ class Participation extends Model implements ParticipantContract
      */
     public function __construct(array $attributes = [])
     {
-        $this->setTable(
-            config('messenger.participations.table', 'participations')
-        );
 
         $this->connection = config('messenger.participations.connection', 'mongodb');
 
