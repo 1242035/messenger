@@ -1,6 +1,7 @@
 <?php
 namespace Viauco\Messenger\Events;
 use Illuminate\Broadcasting\PresenceChannel;
+use Illuminate\Broadcasting\Channel;
 
 class Discussion extends Base
 {
@@ -23,4 +24,9 @@ class Discussion extends Base
     {
         return '_discussion';
     }
-}
+
+    public function broadcastWith()
+    {
+        return ['id' => $this->discussion->getKey()];
+    }
+}   

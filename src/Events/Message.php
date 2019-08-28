@@ -24,4 +24,9 @@ class Message extends Base
     {
         return '_messages';
     }
+
+    public function broadcastWith()
+    {
+        return ['id' => $this->message->getKey()];
+    }
 }

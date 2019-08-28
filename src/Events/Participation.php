@@ -26,4 +26,9 @@ class Participation extends Base
     {
         return '_participation';
     }
+
+    public function broadcastWith()
+    {
+        return ['id' => $this->participation->getKey()];
+    }
 }

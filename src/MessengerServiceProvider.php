@@ -39,6 +39,7 @@ class MessengerServiceProvider extends PackageServiceProvider
         
         $this->registerEvents();
 
+        $this->registerBroadcastRouting();
     }
 
     /**
@@ -100,5 +101,10 @@ class MessengerServiceProvider extends PackageServiceProvider
     protected function registerEvents()
     {
         $this->app->register(PackageEventServiceProvider::class);
+    }
+
+    protected function registerBroadcastRouting()
+    {
+        $this->app->register(BroadcastServiceProvider::class);
     }
 }
