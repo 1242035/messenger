@@ -24,6 +24,7 @@ abstract class Controller extends BaseController
     protected function _success($data)
     {
         $response = [
+            'success' => true,
             'code'    => 200,
             'type'    => 'success',
             'message' => 'Success',
@@ -37,6 +38,7 @@ abstract class Controller extends BaseController
     protected function _error($error = null, $code = 500, $type = 'error', $message='error')
     {
         return response()->json([
+            'success' => false,
             'code'    => $code,
             'type'    => $type,
             'message' => $message,
