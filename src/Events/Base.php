@@ -13,16 +13,16 @@ abstract class Base implements ShouldQueue, ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $broadcastQueue = '_conversations';
+    //public $broadcastQueue = 'conversations';
 
     public function broadcastOn()
     {
-        return new Channel( config('messenger.events.public.channel', '_conversations') );
+        return new Channel( config('messenger.events.public.channel', 'conversations') );
     }
 
     public function broadcastAs()
     {
-        return config('messenger.events.public.name', '_conversations');
+        return config('messenger.events.public.name', 'conversations');
     }
 
     public function __set($name, $value)

@@ -117,5 +117,5 @@ return [
      * The only requirement is that the class should implement
      * `ChannelManager` interface provided by this package.
      */
-    'channel_manager' => \Viauco\Messenger\Socket\ChannelManager::class,
+    'channel_manager' => \Viauco\Messenger\Socket\Channels\ChannelManager::class,
 ];

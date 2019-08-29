@@ -19,12 +19,12 @@ class Participation extends Base
 
     public function broadcastOn()
     {
-        return new PresenceChannel( '_participation_'. $this->discussion->getKey() );
+        return new PresenceChannel( 'participation-'. $this->discussion->getKey() );
     }
 
     public function broadcastAs()
     {
-        return '_participation';
+        return 'participation';
     }
 
     public function broadcastWith()

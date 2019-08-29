@@ -7,7 +7,7 @@ namespace Viauco\Messenger;
  * @package  Viauco\Messenger
  */
 
-class MessengerServiceProvider extends PackageServiceProvider
+class MessengerServiceProvider extends ServiceProvider
 {
     /* -----------------------------------------------------------------
      |  Properties
@@ -100,7 +100,7 @@ class MessengerServiceProvider extends PackageServiceProvider
 
     protected function registerEvents()
     {
-        $this->app->register(PackageEventServiceProvider::class);
+        $this->app->register(EventServiceProvider::class);
     }
 
     protected function registerBroadcastRouting()

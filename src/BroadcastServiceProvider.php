@@ -4,7 +4,7 @@ namespace Viauco\Messenger;
 
 use Illuminate\Support\Facades\Broadcast;
 
-class BroadcastServiceProvider extends PackageEventServiceProvider
+class BroadcastServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap any application services.
@@ -13,8 +13,14 @@ class BroadcastServiceProvider extends PackageEventServiceProvider
      */
     public function boot()
     {
-        Broadcast::routes( ['middleware' => config('messenger.auth.middleware') ]);
-
-        $this->loadRoutesFrom(__DIR__.'/../routes/channels.php');
+        /*Broadcast::routes( ['middleware' => 'multiauth:member']);
+        Broadcast::channel('presence-discussion-{id}', function ($user, $discussionId) {
+            return ['id' => 2, 'email' => 'tiachopden304@gmail.com'];
+        }, ['guards' => ['member'] ]);
+        
+        Broadcast::channel('message-{id}', function ($user, $id) {
+            return (array)$user;
+        }, ['guards' => ['member'] ]);*/
+        //$this->loadRoutesFrom(__DIR__.'/../routes/channels.php');
     }
 }

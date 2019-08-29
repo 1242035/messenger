@@ -12,13 +12,13 @@
 */
 
 Broadcast::channel('public', function ($user) {
-    return $user;
+    return true;
 });
 
-Broadcast::channel('_discussion_{id}', function ($user, $id) {
-    return $user;
+Broadcast::channel('_discussion_{id}', function ($user, $discussionId) {
+    return ['id' => 2, 'email' => 'tiachopden304@gmail.com'];
 });
 
 Broadcast::channel('_message_{id}', function ($user, $id) {
-    return $user;
+    return (array)$user;
 });

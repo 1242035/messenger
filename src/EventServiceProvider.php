@@ -8,7 +8,7 @@ namespace Viauco\Messenger;
  */
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
-class PackageEventServiceProvider extends ServiceProvider
+class EventServiceProvider extends ServiceProvider
 {
     protected $listen = [
         \Viauco\Messenger\Events\DiscussionCreate::class => [

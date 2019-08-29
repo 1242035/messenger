@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['prefix' => '_conversations', 'namespace' => 'Viauco\Messenger\Controllers', 'middleware' => config('messenger.auth.middleware') ], function () 
+Route::group(['prefix' => '_conversations', 'namespace' => '\Viauco\Messenger\Controllers', 'middleware' => config('messenger.auth.middleware') ], function () 
 {
     Route::group(['prefix' => 'discussions'], function () 
     {
@@ -25,6 +25,9 @@ Route::group(['prefix' => '_conversations', 'namespace' => 'Viauco\Messenger\Con
     {
         Route::get('/', ['as' => 'viauco_messenger_notifications_index', 'uses' => 'NotificationController@index']);
     });
+
+    Route::post('/auth', ['as' => 'viauco_messenger_conversations_auth', 'uses' => 'BroadcastController@auth']);
 });
 
+//socket route
 \Viauco\Messenger\Socket\WebSocketsRouter::webSocket( config('websockets.path') , \Viauco\Messenger\Socket\SocketHandler::class);
