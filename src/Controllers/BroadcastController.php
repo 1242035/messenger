@@ -1,12 +1,12 @@
 <?php
 namespace Viauco\Messenger\Controllers;
 
-use Viauco\Messenger\Resources\User;
+use Illuminate\Support\Facades\Broadcast;
 
 class BroadcastController extends Controller
 {
     public function auth()
     {
-        return response()->json(new User(auth()->user()));
+        return Broadcast::auth( request() );
     }
 }

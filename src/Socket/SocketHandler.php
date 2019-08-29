@@ -21,7 +21,7 @@ class SocketHandler extends \BeyondCode\LaravelWebSockets\WebSockets\WebSocketHa
     public function onError(ConnectionInterface $connection, \Exception $e)
     {
         parent::onError($connection, $e);
-        logger()->debug('SocketHandler onError');
+        logger()->error('SocketHandler onError', ['exception' => $e]);
     }
 
     public function onMessage(ConnectionInterface $connection, MessageInterface $msg)

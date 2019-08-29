@@ -11,14 +11,17 @@
 |
 */
 
-Broadcast::channel('public', function ($user) {
+Broadcast::channel('public', function ($user) 
+{
     return true;
 });
 
-Broadcast::channel('_discussion_{id}', function ($user, $discussionId) {
-    return ['id' => 2, 'email' => 'tiachopden304@gmail.com'];
+Broadcast::channel('discussion-{id}', function ($user, $discussionId) 
+{
+    return ['id' => $user->id, 'email' => $user->email];
 });
 
-Broadcast::channel('_message_{id}', function ($user, $id) {
-    return (array)$user;
+Broadcast::channel('message-{id}', function ($user, $id) 
+{
+    return ['id' => $user->id, 'email' => $user->email];
 });
