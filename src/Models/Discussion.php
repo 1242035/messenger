@@ -42,8 +42,6 @@ class Discussion extends Model implements DiscussionContract
 
     use SoftDeletes;
 
-    
-
     /* -----------------------------------------------------------------
      |  Properties
      | -----------------------------------------------------------------
@@ -54,7 +52,7 @@ class Discussion extends Model implements DiscussionContract
      *
      * @var array
      */
-    protected $fillable = ['subject','key'];
+    protected $fillable = ['subject','ids'];
 
     /**
      * The attributes that should be mutated to dates.
@@ -81,15 +79,14 @@ class Discussion extends Model implements DiscussionContract
      */
     public function __construct(array $attributes = [])
     {
-        /*$this->setTable(
-            config('messenger.discussions.table', 'discussions')
-        );*/
-
-        $this->connection = config('messenger.discussions.connection','mongodb');
-
-        $this->collection = config('messenger.discussions.table', 'discussions');
-
         parent::__construct($attributes);
+        
+        if( null !== config('messenger.discussions.connection') )
+        {
+            $this->setConnection(config('messenger.discussions.connection'));
+        }
+
+        $this->setTable(config('messenger.discussions.table', 'discussions') );
     }
 
     /* -----------------------------------------------------------------
@@ -122,13 +119,23 @@ class Discussion extends Model implements DiscussionContract
     }
 
     /**
-     * Get the participable that created the first message.
+     * User/Author relationship (alias).
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
-    public function creator()
+    public function author()
     {
-        return $this->messages()->oldest()->first()->author();
+        return $this->participable();
+    }
+
+    /**
+     * Participable relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     */
+    public function participable()
+    {
+        return $this->morphTo();
     }
 
     /* -----------------------------------------------------------------
@@ -378,8 +385,9 @@ class Discussion extends Model implements DiscussionContract
                 ->delete();
         }
 
-        if ($reload)
+        if ($reload) {
             $this->load(['participations']);
+        }
 
         return $deleted;
     }
@@ -456,8 +464,9 @@ class Discussion extends Model implements DiscussionContract
             })
             ->count();
 
-        if ($reload)
+        if ($reload) {
             $this->load(['participations']);
+        }
 
         return $restored;
     }
@@ -513,8 +522,9 @@ class Discussion extends Model implements DiscussionContract
     {
         $participation = $this->getParticipationByParticipable($participable);
 
-        if (is_null($participation))
+        if (is_null($participation)) {
             return new Collection;
+        }
 
         return is_null($participation->last_read)
             ? $this->messages->toBase()

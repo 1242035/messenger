@@ -13,7 +13,7 @@ class BroadcastServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Broadcast::routes( ['middleware' => 'multiauth:member']);
+        Broadcast::routes( ['middleware' => config('messenger.auth.middleware')]);
         
         $this->loadRoutesFrom(__DIR__.'/../routes/channels.php');
     }

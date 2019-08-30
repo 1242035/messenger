@@ -7,6 +7,6 @@ class PresenceSubscribe extends Channel
 
     public function broadcastAs()
     {
-        return '_presence_subscribe';
+        return 'presence-subscribe';
     }
 }   

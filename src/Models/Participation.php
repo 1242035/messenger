@@ -29,8 +29,6 @@ class Participation extends Model implements ParticipantContract
 
     use SoftDeletes;
 
-    protected $collection = 'participations';
-
     /* -----------------------------------------------------------------
      |  Properties
      | -----------------------------------------------------------------
@@ -62,7 +60,6 @@ class Participation extends Model implements ParticipantContract
      */
     protected $casts = [
         'id'              => 'string',
-        'discussion_id'   => 'string',
         'participable_id' => 'string',
     ];
 
@@ -78,12 +75,14 @@ class Participation extends Model implements ParticipantContract
      */
     public function __construct(array $attributes = [])
     {
-
-        $this->connection = config('messenger.participations.connection', 'mongodb');
-
-        $this->collection = config('messenger.participations.table', 'participations');
-
         parent::__construct($attributes);
+        
+        if( null !== config('messenger.participations.connection') )
+        {
+            $this->setConnection(config('messenger.participations.connection'));
+        }
+
+        $this->setTable(config('messenger.participations.table', 'participations') );
     }
 
     /* -----------------------------------------------------------------
@@ -100,6 +99,13 @@ class Participation extends Model implements ParticipantContract
     {
         return $this->belongsTo(
             config('messenger.discussions.model', Discussion::class)
+        );
+    }
+
+    public function information()
+    {
+        return $this->hasOne(
+            config('messenger.information.model', Information::class)
         );
     }
 

@@ -2,7 +2,7 @@
 
 namespace Viauco\Messenger\Resources;
 
-class Participation extends Item
+class Information extends Item
 {
     /**
      * Transform the resource into an array.
@@ -14,9 +14,8 @@ class Participation extends Item
     {
         return [
             'id' => $this->_id,
-            'user' => new User($this->participable),
-            'discussion_id' => $this->discussion_id,
-            'information' => $this->information,
+            'last_active' => $this->last_active,
+            'last_message_id' => Message::collection($this->message),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

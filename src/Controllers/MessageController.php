@@ -8,7 +8,7 @@ use Viauco\Messenger\Resources\MessageCollection;
 
 class MessageController extends Controller
 {
-    /* SECTION discussion */
+    
     public function messageGetAll($discussionId)
     {
         try
@@ -17,9 +17,9 @@ class MessageController extends Controller
             
             if( ! isset( $params['per_page'] ) ){ $params['per_page'] = config('messenger.messages.piginate.limit'); }
 
-            $discussions = Discussion::findOrFail($discussionId)->notDeleted();
-
-            $messages = $discussions->messages()->notDeleted()->paginate($params['per_page']);
+            $discussion = Discussion::notDeleted()->findOrFail($discussionId);
+            
+            $messages = $discussion->messages()->paginate($params['per_page']);
 
             return $this->_success( new MessageCollection( $messages ) );
         }
@@ -41,6 +41,10 @@ class MessageController extends Controller
 
             $message = Message::create($params);
 
+            $message->participable_id = request()->user()->id;
+
+            $message->participable_type = request()->user()->getMorphClass();
+
             $discussion->messages()->save( $message );
 
             event( new \Viauco\Messenger\Events\MessageCreate( request()->all(), $message ) );
@@ -60,7 +64,7 @@ class MessageController extends Controller
         try
         {
             $message = Message::findOrFail($messageId);
-
+            
             return $this->_success( new MessageItemResource( $message ) );
         }
         catch(\Exception $e)

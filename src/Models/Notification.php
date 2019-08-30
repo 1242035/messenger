@@ -20,11 +20,14 @@ class Notification extends Model implements NotificationContract
     public function __construct(array $attributes = [])
     {
 
-        $this->connection = config('messenger.notifications.connection','mongodb');
-
-        $this->collection = config('messenger.notifications.table','notifications');
-
         parent::__construct($attributes);
+        
+        if( null !== config('messenger.notifications.connection') )
+        {
+            $this->setConnection(config('messenger.notifications.connection'));
+        }
+
+        $this->setTable(config('messenger.notifications.table', 'notifications') );
     }
     /**
      * The guarded attributes on the model.
@@ -40,7 +43,7 @@ class Notification extends Model implements NotificationContract
      */
     protected $casts = [
         'data' => 'array',
-        'read_at' => 'datetime',
+        'read_at' => 'datetime'
     ];
 
     /**

@@ -6,12 +6,11 @@ use Viauco\Messenger\Resources\Discussion as DiscussionItemResource;
 
 class DiscussionController extends Controller
 {
-    /* SECTION discussion */
     public function discussionGet($discussionId)
     {
         try
         {
-            $discussions = Discussion::findOrFail($discussionId)->notDeleted();
+            $discussions = Discussion::notDeleted()->findOrFail($discussionId);
             return $this->_success( new DiscussionItemResource( $discussions ) );
         }
         catch(\Exception $e)
@@ -40,30 +39,46 @@ class DiscussionController extends Controller
         }
     }
 
-    public function discussionGetOrCreate($sourceId, $targetId)
+    public function discussionGetOrCreate()
     {
+        $request = request();
         try
         {            
-
-            $ids = [$sourceId, $targetId];
+            $ids = $request->ids;
+            try {
+                $ids = explode(',', $ids);
+            }catch(\Exception $e){}
 
             asort( $ids );
             
             $key = implode('_', $ids);
+            
+            $discussion = Discussion::where(['ids' => $key])->first();
 
-            $discussion = Discussion::updateOrCreate([
-                'key' => $key
-            ]);
+            if( ! isset( $discussion ) ) 
+            {
+                
+                $discussion = Discussion::create([
+                    'ids' => $key
+                ]);
 
-            $discussion->subject = $key;
+                $discussion->participable_id = request()->user()->id;
 
-            $userClass = config('messenger.users.model');
+                $discussion->participable_type = request()->user()->getMorphClass();
+                
+                $discussion->subject = $key;
 
-            $users = $userClass::whereIn(( new $userClass )->getKeyName(), $ids )->get();
+                $userClass = config('messenger.users.model');
 
-            $discussion->addParticipants($users);
+                $users = $userClass::whereIn(( new $userClass )->getKeyName(), $ids )->get();
 
-            event( new \Viauco\Messenger\Events\DiscussionCreate( request()->all(), $discussion ) );
+                $discussion->addParticipants($users);
+                
+                $discussion->save();
+
+                event( new \Viauco\Messenger\Events\DiscussionCreate( request()->all(), $discussion ) );
+
+            }
 
             return $this->_success( new DiscussionItemResource($discussion) );
         }

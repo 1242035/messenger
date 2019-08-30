@@ -7,6 +7,6 @@ class privateSubscribe extends Channel
 
     public function broadcastAs()
     {
-        return '_private_subscribe';
+        return 'private-subscribe';
     }
 }   

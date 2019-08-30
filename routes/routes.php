@@ -4,10 +4,12 @@ Route::group(['prefix' => '_conversations', 'namespace' => '\Viauco\Messenger\Co
 {
     Route::group(['prefix' => 'discussions'], function () 
     {
-        Route::get('/{sourceId}/vs/{targetId}', ['as' => 'viauco_messenger_discussions_getOrCreate', 'uses' => 'DiscussionController@discussionGetOrCreate']);
-        
+        Route::get('/fetch', ['as' => 'viauco_messenger_discussions_getOrCreate_get', 'uses' => 'DiscussionController@discussionGetOrCreate']);
+        Route::post('/fetch', ['as' => 'viauco_messenger_discussions_getOrCreate_post', 'uses' => 'DiscussionController@discussionGetOrCreate']);
+
         Route::post('/{discussionId}/participations/{participationId}', ['as' => 'viauco_messenger_discussions_participations_post', 'uses' => 'ParticipationController@participationPost']);
         Route::delete('/{discussionId}/participations/{participationId}', ['as' => 'viauco_messenger_discussions_participations_delete_id', 'uses' => 'ParticipationController@participationDelete']);
+        Route::get('/{discussionId}/participations/{participationId}', ['as' => 'viauco_messenger_discussions_participations_get_id', 'uses' => 'ParticipationController@participationGetId']);
         Route::get('/{discussionId}/participations', ['as' => 'viauco_messenger_discussions_participations_get', 'uses' => 'ParticipationController@participationGet']);
 
         Route::get('/{discussionId}/messages/{id}', ['as' => 'viauco_messenger_discussions_messages_get_id', 'uses' => 'MessageController@messageGet']);

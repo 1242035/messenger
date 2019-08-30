@@ -18,7 +18,7 @@ namespace Viauco\Messenger\Contracts;
  * @property  \Illuminate\Database\Eloquent\Collection       participations
  * @property  \Illuminate\Database\Eloquent\Collection       recipients
  */
-interface Notification
+interface Information
 {
-
+    public function message();
 }

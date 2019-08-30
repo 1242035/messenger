@@ -51,7 +51,7 @@ interface Discussion
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function creator();
+    public function author();
 
     /* -----------------------------------------------------------------
      |  Scopes

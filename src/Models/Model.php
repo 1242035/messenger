@@ -1,10 +1,8 @@
 <?php
 namespace Viauco\Messenger\Models;
 
-//use Illuminate\Database\Eloquent\Model as Eloquent;
 use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 use Viauco\Messenger\Traits\Notifiable;
-use Viauco\Messenger\Traits\PrefixedModel;
 
 /**
  * Class     Model
@@ -13,11 +11,7 @@ use Viauco\Messenger\Traits\PrefixedModel;
  */
 abstract class Model extends Eloquent
 {
-    use PrefixedModel, Notifiable;
-
-    protected $connection = 'mongodb';
-
-    protected $collection = 'table';
+    use Notifiable;
 
     /* -----------------------------------------------------------------
      |  Constructor
@@ -32,7 +26,6 @@ abstract class Model extends Eloquent
     public function __construct(array $attributes = [])
     {
         $this->setConnection(config('messenger.database.connection'));
-        $this->setPrefix(config('messenger.database.prefix'));
 
         parent::__construct($attributes);
     }

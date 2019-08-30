@@ -15,7 +15,13 @@ class EventServiceProvider extends ServiceProvider
             \Viauco\Messenger\Listeners\DiscussionCreateBroadcastListener::class,
         ],
         \Viauco\Messenger\Events\MessageCreate::class => [
-            \Viauco\Messenger\Listeners\MessageCreateBroadcastListener::class,
+            \Viauco\Messenger\Listeners\MessageCreateListener::class,
+        ],
+        \Viauco\Messenger\Events\Socket\PresenceSubscribe::class => [
+            \Viauco\Messenger\Listeners\PresenceSubscribeListener::class,
+        ],
+        \Viauco\Messenger\Events\Socket\PresenceUnsubscribe::class => [
+            \Viauco\Messenger\Listeners\PresenceUnsubscribeListener::class,
         ],
     ];
 }

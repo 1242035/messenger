@@ -7,6 +7,6 @@ class PresenceUnsubscribe extends Channel
 
     public function broadcastAs()
     {
-        return '_presence_unsubscribe';
+        return 'presence-unsubscribe';
     }
 }   

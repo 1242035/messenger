@@ -1,8 +1,7 @@
 <?php
-
 namespace Viauco\Messenger\Listeners;
 
-use Viauco\Messenger\Events\MessageCreate;
+use Viauco\Messenger\Events\MessageRemove;
 
 class MessageCreateBroadcastListener extends Base
 {
@@ -15,8 +14,8 @@ class MessageCreateBroadcastListener extends Base
      */
     public function handle(MessageCreate $event)
     {
-        logger()->info('DiscussionCreateListener start');
-        broadcast( $event );
-        logger()->info('DiscussionCreateListener end');
+        logger()->info('MessageCreateBroadcastListener start');
+        
+        logger()->info('MessageCreateBroadcastListener end');
     }
 }

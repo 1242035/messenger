@@ -7,6 +7,6 @@ class PrivateUnsubscribe extends Channel
 
     public function broadcastAs()
     {
-        return '_private_unsubscribe';
+        return 'private-unsubscribe';
     }
 }   

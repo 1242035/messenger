@@ -9,8 +9,6 @@ return [
 
     'database' => [
         'connection' => env('DB_CONNECTION', 'mongodb'),
-
-        'prefix'     => null,
     ],
 
     /* -----------------------------------------------------------------
@@ -27,13 +25,13 @@ return [
     'discussions' => [
         'table' => 'discussions',
         'model' => Viauco\Messenger\Models\Discussion::class,
-        'connection' => env('DB_CONNECTION', 'mongodb'),
+        'connection' => null,
     ],
 
     'participations' => [
         'table' => 'participations',
         'model' => Viauco\Messenger\Models\Participation::class,
-        'connection' => env('DB_CONNECTION', 'mongodb'),
+        'connection' => null,
         'piginate' => [
             'offset' => 0,
             'limit'  => 25
@@ -43,17 +41,25 @@ return [
     'messages' => [
         'table' => 'messages',
         'model' => Viauco\Messenger\Models\Message::class,
-        'connection' => env('DB_CONNECTION', 'mongodb'),
+        'connection' => null,
         'piginate' => [
             'offset' => 0,
             'limit'  => 25
         ]
     ],
-
+    'informations' => [
+        'table' => 'informations',
+        'model' => Viauco\Messenger\Models\Information::class,
+        'connection' => null,
+        'piginate' => [
+            'offset' => 0,
+            'limit'  => 25
+        ]
+    ],
     'notifications' => [
         'table' => 'notifications',
         'model' => Viauco\Messenger\Models\Notification::class,
-        'connection' => env('DB_CONNECTION', 'mongodb'),
+        'connection' => null,
         'piginate' => [
             'offset' => 0,
             'limit'  => 25

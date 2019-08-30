@@ -7,6 +7,6 @@ class ChannelUnsubscribe extends Channel
 
     public function broadcastAs()
     {
-        return '_channel_unsubscribe';
+        return 'channel-unsubscribe';
     }
 }   

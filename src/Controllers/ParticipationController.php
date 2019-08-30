@@ -2,6 +2,7 @@
 namespace Viauco\Messenger\Controllers;
 
 use Viauco\Messenger\Models\Discussion;
+use Viauco\Messenger\Models\Participation;
 use Viauco\Messenger\Resources\Discussion as DiscussionItemResource;
 use Viauco\Messenger\Resources\Participation as ParticipationItemResource;
 use Viauco\Messenger\Resources\ParticipationCollection;
@@ -31,6 +32,23 @@ class ParticipationController extends Controller
         }
     }
     
+    public function participationGetId($discussionId, $participationId)
+    {
+        try
+        {
+            $participation = Participation::notDeleted()->findOrFail($participationId);
+            
+            return $this->_success( new ParticipationItemResource( $participation ) );
+            
+        }
+        catch(\Exception $e)
+        {
+            logger()->error( $e );
+
+            return $this->_error($e);
+        }
+    }
+
     public function participationPost($discussionId, $memberId)
     {
         try

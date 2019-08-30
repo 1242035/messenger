@@ -17,6 +17,7 @@ class Message extends Item
             'body'       => $this->body,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'author'     => new User( $this->author ),
         ];
     }
 }

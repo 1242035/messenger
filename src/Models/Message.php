@@ -25,8 +25,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Message extends Model implements MessageContract
 {
     use SoftDeletes;
-
-    protected $collection = 'messages';
     /* -----------------------------------------------------------------
      |  Properties
      | -----------------------------------------------------------------
@@ -47,7 +45,8 @@ class Message extends Model implements MessageContract
     protected $fillable = [
         'discussion_id',
         'body',
-        'type'
+        'type',
+        'creator_id'
     ];
 
      /**
@@ -64,7 +63,7 @@ class Message extends Model implements MessageContract
     protected $casts = [
         'id'              => 'string',
         'discussion_id'   => 'string',
-        'participable_id' => 'string',
+        'participable_id' => 'string'
     ];
 
     /* -----------------------------------------------------------------
@@ -79,12 +78,15 @@ class Message extends Model implements MessageContract
      */
     public function __construct(array $attributes = [])
     {
-
-        $this->connection = config('messenger.messages.connection','mongodb');
-
-        $this->collection = config('messenger.messages.table','messages');
-
         parent::__construct($attributes);
+        
+        if( null !== config('messenger.messages.connection') )
+        {
+            $this->setConnection(config('messenger.messages.connection'));
+        }
+
+        $this->setTable(config('messenger.messages.table', 'messages') );
+
     }
 
     /* -----------------------------------------------------------------
