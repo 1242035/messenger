@@ -12,7 +12,7 @@ class PrivateChannel extends \BeyondCode\LaravelWebSockets\WebSockets\Channels\P
     {
         parent::subscribe($connection, $payload);
         $this->storage[$connection->resourceId] = ['connection' => $connection,'payload' => $payload];
-        event( new \Viauco\Messenger\Events\Socket\PrivateSubscribe($connection, $payload) );
+        event( new \Viauco\Messenger\Events\Socket\PrivateSubscribe($connection->resourceId, $payload) );
     }
 
     public function unsubscribe(ConnectionInterface $connection)
@@ -20,6 +20,6 @@ class PrivateChannel extends \BeyondCode\LaravelWebSockets\WebSockets\Channels\P
         parent::unsubscribe($connection);
         $payload = isset($this->storage[$connection->resourceId]['payload']) ? $this->storage[$connection->resourceId]['payload'] : null;
         $this->storage[$connection->resourceId] = null;
-        event( new \Viauco\Messenger\Events\Socket\PrivateUnsubscribe($connection, $payload) );
+        event( new \Viauco\Messenger\Events\Socket\PrivateUnsubscribe($connection->resourceId, $payload) );
     }
 }

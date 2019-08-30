@@ -18,7 +18,7 @@ class Channel extends \BeyondCode\LaravelWebSockets\WebSockets\Channels\Channel
     {
         parent::unsubscribe($connection);
         $this->storage[$connection->resourceId] = ['connection' => $connection,'payload' => $payload];
-        event( new \Viauco\Messenger\Events\Socket\ChannelSubscribe($connection, $payload) );
+        event( new \Viauco\Messenger\Events\Socket\ChannelSubscribe($connection->resourceId, $payload) );
     }
 
     public function unsubscribe(ConnectionInterface $connection)
@@ -26,6 +26,6 @@ class Channel extends \BeyondCode\LaravelWebSockets\WebSockets\Channels\Channel
         parent::unsubscribe($connection);
         $payload = isset($this->storage[$connection->resourceId]['payload']) ? $this->storage[$connection->resourceId]['payload'] : null;
         $this->storage[$connection->resourceId] = null;
-        event( new \Viauco\Messenger\Events\Socket\ChannelUnsubscribe($connection, $payload) );
+        event( new \Viauco\Messenger\Events\Socket\ChannelUnsubscribe($connection->resourceId, $payload) );
     }
 }
