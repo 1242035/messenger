@@ -7,15 +7,15 @@ use Illuminate\Broadcasting\PresenceChannel;
 abstract class Base extends \Viauco\Messenger\Events\Base
 {
 
-    public $broadcastQueue = '_conversations';
+    //public $broadcastQueue = '_conversations';
 
     public function broadcastOn()
     {
-        return new PresenceChannel( '_sockets' );
+        return new PresenceChannel( 'sockets' );
     }
 
     public function broadcastAs()
     {
-        return '_sockets';
+        return 'sockets';
     }
 }

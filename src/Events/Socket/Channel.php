@@ -10,12 +10,13 @@ class Channel extends Base
 
     public function __construct($connection, $request = null)
     {
-        $this->request       = $request;
         $this->connection    = $connection;
+        $this->request       = $request;
+        parent::__construct();
     }
 
     public function broadcastAs()
     {
-        return '_channel';
+        return 'channel';
     }
 }   

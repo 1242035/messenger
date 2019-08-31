@@ -14,13 +14,16 @@ class PresenceSubscribeListener extends Base
      */
     public function handle(PresenceSubscribe $event)
     {
-        logger()->error('PresenceSubscribeListener start',['exception' => $connection ]);
+        logger()->error('PresenceSubscribeListener start');
+
         $connection = $event->connection;
         $payload    = $event->request;
+
         if( isset( $connection ) && isset( $payload ) )
         {
 
         }
+
         logger()->info('PresenceSubscribeListener end');
     }
 }

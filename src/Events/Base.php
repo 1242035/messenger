@@ -5,15 +5,18 @@ namespace Viauco\Messenger\Events;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Broadcasting\Channel;
 
-abstract class Base implements ShouldQueue, ShouldBroadcast
+abstract class Base implements ShouldQueue
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     //public $broadcastQueue = 'conversations';
+    public function __construct()
+    {
+
+    }
 
     public function broadcastOn()
     {
