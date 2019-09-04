@@ -17,16 +17,16 @@ class Message extends Broadcast
 
     public function broadcastOn()
     {
-        return new PresenceChannel( 'messages-'. $this->message->discussion->getKey() );
+        return new PresenceChannel( 'discussion-'. $this->message->discussion->getKey() );
     }
 
     public function broadcastAs()
     {
-        return 'messages';
+        return 'message';
     }
 
-    public function broadcastWith()
+    /*public function broadcastWith()
     {
         return ['id' => $this->message->getKey()];
-    }
+    }*/
 }

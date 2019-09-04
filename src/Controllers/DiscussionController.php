@@ -39,9 +39,8 @@ class DiscussionController extends Controller
         }
     }
 
-    public function discussionGetOrCreate()
+    public function discussionGetOrCreate(\Viauco\Messenger\Requests\DiscussionGet $request)
     {
-        $request = request();
         try
         {            
             $ids = $request->ids;
@@ -51,8 +50,13 @@ class DiscussionController extends Controller
 
             asort( $ids );
             
-            $key = implode('_', $ids);
-            
+            $key = trim( trim( implode('_', $ids),'_') );
+            if( empty( $key ) )
+            {
+                return $this->_error( [
+                    'error' => 'invalid_params'
+                ] );
+            }
             $discussion = Discussion::where(['ids' => $key])->first();
 
             if( ! isset( $discussion ) ) 
@@ -81,6 +85,24 @@ class DiscussionController extends Controller
             }
 
             return $this->_success( new DiscussionItemResource($discussion) );
+        }
+        catch(\Exception $e)
+        {
+            logger()->error( $e );
+
+            return $this->_error($e);
+        }
+    }
+
+    public function searchByUser(\Viauco\Messenger\Requests\DiscussionSearchByUser $request)
+    {
+        try
+        {
+            $userClass = config('messenger.users.model');
+
+            $user = $userClass::findOrFail( $request->user_id );
+            $discussions = Discussion::forUser($user)->withParticipations()->get();
+            return $this->_success( DiscussionItemResource::collection( $discussions )  );
         }
         catch(\Exception $e)
         {

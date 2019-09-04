@@ -29,6 +29,9 @@ Route::group(['prefix' => '_conversations', 'namespace' => '\Viauco\Messenger\Co
     });
 
     Route::post('/auth', ['as' => 'viauco_messenger_conversations_auth', 'uses' => 'BroadcastController@auth']);
+
+    Route::post('/search/by_user', ['as' => 'viauco_messenger_discussions_participations_chatted_by_user_post', 'uses' => 'DiscussionController@searchByUser']);
+    Route::get('/search/by_user', ['as' => 'viauco_messenger_discussions_participations_chatted_by_user_get', 'uses' => 'DiscussionController@searchByUser']);
 });
 
 //socket route

@@ -1,7 +1,7 @@
 <?php
 namespace Viauco\Messenger\Requests;
 
-class DiscussionGet extends Base
+class MessageText extends Base
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,7 +21,8 @@ class DiscussionGet extends Base
     public function rules()
     {
         return [
-            'ids' => 'required'
+            'body' => 'required',
+            'type' => 'required'
         ];
     }
 }

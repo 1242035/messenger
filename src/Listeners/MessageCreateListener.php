@@ -14,28 +14,21 @@ class MessageCreateListener extends Base
      */
     public function handle(MessageCreate $event)
     {
-        logger()->info('MessageCreateListener start');
+        //logger()->info('MessageCreateListener start');
         $message = $event->message;
         if( isset( $message ) )
         {
-            logger()->info('MessageCreateListener message: ' .json_encode($message));
+            //logger()->info('MessageCreateListener message: ' .json_encode($message));
             $participations = $message->participations;
             if( isset( $participations ) && count( $participations ) > 0 )
             {
                 foreach($participations as $participation)
                 {
-                    $information = $participation->information;
-                    if( ! isset( $information ) ) 
-                    {
-                        $information = new \Viauco\Messenger\Models\Information();
-                        $information->participation_id=$participation->_id;
-                        //$information->last_active = \Carbon\Carbon::now();
-                    }
-                    $information->last_message_id = $message->_id;
-                    $information->save();
+                    $participation->last_message_id = $message->id;
+                    $participation->save();
                 }
             }
         }
-        logger()->info('MessageCreateListener end');
+        //logger()->info('MessageCreateListener end');
     }
 }

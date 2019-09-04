@@ -126,6 +126,11 @@ class Message extends Model implements MessageContract
         return $this->morphTo();
     }
 
+    public function attachments()
+    {
+        return $this->morphToMany(config('messenger.attachments.model', Attachable::class), 'attachable');
+    }
+
     /**
      * Participations relationship.
      *

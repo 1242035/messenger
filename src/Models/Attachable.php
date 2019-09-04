@@ -1,7 +1,7 @@
 <?php
 namespace Viauco\Messenger\Models;
 
-use Viauco\Messenger\Contracts\Participation as ParticipantContract;
+use Viauco\Messenger\Contracts\Attachment as AttachmentContract;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -20,7 +20,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property  \Carbon\Carbon                                 updated_at
  * @property  \Carbon\Carbon                                 deleted_at
  */
-class Participation extends Model implements ParticipantContract
+class Attachable extends Model implements AttachmentContract
 {
     /* -----------------------------------------------------------------
      |  Traits
@@ -40,12 +40,12 @@ class Participation extends Model implements ParticipantContract
      * @var array
      */
     protected $fillable = [
-        'discussion_id',
-        'participable_type',
-        'participable_id',
-        'last_read',
-        'last_message_id',
-        'last_active',
+        'attchable_type',
+        'attachable_id',
+        'path',
+        'mime',
+        'size',
+        'type',
     ];
 
     /**
@@ -53,7 +53,7 @@ class Participation extends Model implements ParticipantContract
      *
      * @var array
      */
-    protected $dates = ['last_read', 'deleted_at'];
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be cast to native types.
@@ -62,7 +62,7 @@ class Participation extends Model implements ParticipantContract
      */
     protected $casts = [
         'id'              => 'string',
-        'participable_id' => 'string',
+        'attachable_id'   => 'string',
     ];
 
     /* -----------------------------------------------------------------
@@ -79,36 +79,27 @@ class Participation extends Model implements ParticipantContract
     {
         parent::__construct($attributes);
         
-        if( null !== config('messenger.participations.connection') )
+        if( null !== config('messenger.attachments.connection') )
         {
-            $this->setConnection(config('messenger.participations.connection'));
+            $this->setConnection(config('messenger.attachments.connection'));
         }
 
-        $this->setTable(config('messenger.participations.table', 'participations') );
+        $this->setTable(config('messenger.attachments.table', 'attachments') );
     }
-
-    /* -----------------------------------------------------------------
-     |  Relationships
-     | -----------------------------------------------------------------
-     */
 
     /**
-     * Discussion relationship.
+     * Participable relationship.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
-    public function discussion()
+    public function attachable()
     {
-        return $this->belongsTo(
-            config('messenger.discussions.model', Discussion::class)
-        );
+        return $this->morphTo();
     }
 
-    public function message()
+    public function author()
     {
-        return $this->hasOne(
-            config('messenger.messages.model', Message::class), 'id', 'last_message_id'
-        );
+        return $this->participable();
     }
 
     /**
@@ -119,20 +110,5 @@ class Participation extends Model implements ParticipantContract
     public function participable()
     {
         return $this->morphTo();
-    }
-
-    /* -----------------------------------------------------------------
-     |  Getters & Setters
-     | -----------------------------------------------------------------
-     */
-
-    /**
-     * Get the participable string info.
-     *
-     * @return string
-     */
-    public function stringInfo()
-    {
-        return $this->participable->getAttribute('name');
     }
 }

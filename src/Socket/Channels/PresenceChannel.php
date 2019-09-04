@@ -11,10 +11,8 @@ class PresenceChannel extends \BeyondCode\LaravelWebSockets\WebSockets\Channels\
     public function subscribe(ConnectionInterface $connection, stdClass $payload)
     {
         parent::subscribe($connection, $payload);
-        logger()->info('PresenceChannel: '. json_encode($connection->resourceId) );
         $this->storage[$connection->resourceId] = ['connection' => $connection,'payload' => $payload];
         event( new \Viauco\Messenger\Events\Socket\PresenceSubscribe($connection->resourceId, $payload) );
-        logger()->info('PresenceChannel: '. json_encode($this->storage) );
     }
 
     public function unsubscribe(ConnectionInterface $connection)

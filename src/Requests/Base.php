@@ -4,6 +4,7 @@ namespace Viauco\Messenger\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Contracts\Validation\Validator;
 
 abstract class Base extends FormRequest
 {

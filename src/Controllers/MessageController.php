@@ -31,13 +31,13 @@ class MessageController extends Controller
         }
     }
 
-    public function messagePost($discussionId)
+    public function messagePost(\Viauco\Messenger\Requests\MessageText $request, $discussionId)
     {
         try
         {
             $discussion = Discussion::findOrFail($discussionId);
 
-            $params = request()->except('discussionId');
+            $params = $request->except('discussionId');
 
             $message = Message::create($params);
 
@@ -47,9 +47,11 @@ class MessageController extends Controller
 
             $discussion->messages()->save( $message );
 
-            event( new \Viauco\Messenger\Events\MessageCreate( request()->all(), $message ) );
+            $parsedMessage = new MessageItemResource( $message );
 
-            return $this->_success( new MessageItemResource( $message ) );
+            event( new \Viauco\Messenger\Events\MessageCreate( request()->all(), $parsedMessage ) );
+
+            return $this->_success(  $parsedMessage );
         }
         catch(\Exception $e)
         {

@@ -17,20 +17,30 @@ class PresenceUnsubscribeListener extends Base
     {
         logger()->info('PresenceUnsubscribeListener start');
         
+
         $connection = $event->connection;
         $payload    = $event->request;
 
         if( isset( $connection ) && isset( $payload ) )
         {
-            logger()->error('PresenceUnsubscribeListener info:' . $payload->channel_data->user_info->discussion_id);
-
-            if( isset( $payload->channel_data->user_info->discussion_id ) && isset( $payload->channel_data->user_id ) )
+            try 
             {
-                $discussionId = $payload->channel_data->user_info->discussion_id;
-                $userId       = $payload->channel_data->user_id;
-                logger()->error('PresenceUnsubscribeListener info:' . $discussionId . ' => ' . $userId);
-                try 
+                $channelData = json_decode($payload->channel_data);
+
+                //logger()->error('PresenceUnsubscribeListener channelData type:' . gettype($channelData)  );
+
+                $connectionInfo = json_decode(json_encode($channelData->user_info) );
+
+                //logger()->error('PresenceUnsubscribeListener connectionInfo type:' . gettype($connectionInfo)  );
+
+               
+               // $connectionInfo  = isset( $payload->channel_data->user_info ) ? $payload->channel_data->user_info : null;
+                if( isset( $connectionInfo  ) )
                 {
+                    $discussionId = $connectionInfo->discussion_id;
+                    $userId       = $connectionInfo->id;
+                    //logger()->error('PresenceUnsubscribeListener connectionInfo :' . $discussionId . ' => ' . $userId);
+                    
                     $discussion = Discussion::notDeleted()->findOrFail( $discussionId );
                     $participations = $discussion->participations;
                     foreach($participations as $participation)
@@ -38,23 +48,17 @@ class PresenceUnsubscribeListener extends Base
                         if( $participation->participable->id == $userId )
                         {
                             logger()->error('PresenceUnsubscribeListener participation', ['exception' => $participation]);
-
-                            $information = $participation->information;
-                            if( ! isset( $information ) ) 
-                            {
-                                $information = new \Viauco\Messenger\Models\Information();
-                                $information->participation_id = $participation->_id;
-                            }
-                            $information->last_active = now();
-                            $information->save();
+                            $participation->last_active = now();
+                            $participation->save();
                             break;
                         }
                     }
+                    
                 }
-                catch(\Exception $e)
-                {
-                    logger()->error('PresenceUnsubscribeListener error', ['exception' => $e]);
-                }
+            }
+            catch(\Exception $e)
+            {
+                logger()->error('PresenceUnsubscribeListener error: ', ['exception' => $e]);
             }
         }
 

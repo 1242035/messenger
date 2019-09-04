@@ -47,6 +47,15 @@ return [
             'limit'  => 25
         ]
     ],
+    'attachments' => [
+        'table' => 'attachments',
+        'model' => Viauco\Messenger\Models\Attachable::class,
+        'connection' => null,
+        'piginate' => [
+            'offset' => 0,
+            'limit'  => 25
+        ]
+    ],
     'informations' => [
         'table' => 'informations',
         'model' => Viauco\Messenger\Models\Information::class,

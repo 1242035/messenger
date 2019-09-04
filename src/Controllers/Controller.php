@@ -37,8 +37,6 @@ abstract class Controller extends BaseController
 
     protected function _error($error = null, $code = 500, $type = 'error', $message='error')
     {
-        dd($error);
-
         return response()->json([
             'success' => false,
             'code'    => $code,
