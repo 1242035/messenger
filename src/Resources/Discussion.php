@@ -17,7 +17,7 @@ class Discussion extends Item
             'subject'     => $this->subject,
             'members'     => Participation::collection($this->participations),
             'author'      => new User( $this->author ),
-            'lastMessage' => new Message( $this->lastMessage ),
+            'lastMessage' => new Message( $this->getLatestMessage ),
             'created_at'  => $this->created_at,
             'updated_at'  => $this->updated_at,
         ];

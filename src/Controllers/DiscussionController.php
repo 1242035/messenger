@@ -28,7 +28,7 @@ class DiscussionController extends Controller
             $discussion->save();
 
             event( new \Viauco\Messenger\Events\DiscussionUpdate( request()->all(), $discussion ) );
-            
+
             return $this->_success( new DiscussionItemResource( $discussions ) );
         }
         catch(\Exception $e)
@@ -42,14 +42,14 @@ class DiscussionController extends Controller
     public function discussionGetOrCreate(\Viauco\Messenger\Requests\DiscussionGet $request)
     {
         try
-        {            
+        {
             $ids = $request->ids;
             try {
                 $ids = explode(',', $ids);
             }catch(\Exception $e){}
 
             asort( $ids );
-            
+
             $key = trim( trim( implode('_', $ids),'_') );
             if( empty( $key ) )
             {
@@ -59,9 +59,9 @@ class DiscussionController extends Controller
             }
             $discussion = Discussion::where(['ids' => $key])->first();
 
-            if( ! isset( $discussion ) ) 
+            if( ! isset( $discussion ) )
             {
-                
+
                 $discussion = Discussion::create([
                     'ids' => $key
                 ]);
@@ -69,7 +69,7 @@ class DiscussionController extends Controller
                 $discussion->participable_id = request()->user()->id;
 
                 $discussion->participable_type = request()->user()->getMorphClass();
-                
+
                 $discussion->subject = $key;
 
                 $userClass = config('messenger.users.model');
@@ -77,7 +77,7 @@ class DiscussionController extends Controller
                 $users = $userClass::whereIn(( new $userClass )->getKeyName(), $ids )->get();
 
                 $discussion->addParticipants($users);
-                
+
                 $discussion->save();
 
                 event( new \Viauco\Messenger\Events\DiscussionCreate( request()->all(), $discussion ) );
@@ -101,7 +101,8 @@ class DiscussionController extends Controller
             $userClass = config('messenger.users.model');
 
             $user = $userClass::findOrFail( $request->user_id );
-            $discussions = Discussion::forUser($user)->withParticipations()->get();
+            $discussions = Discussion::forUser($user)->withParticipations()->orderBy('updated_at', 'DESC')->get();
+            
             return $this->_success( DiscussionItemResource::collection( $discussions )  );
         }
         catch(\Exception $e)

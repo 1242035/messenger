@@ -52,7 +52,7 @@ class Discussion extends Model implements DiscussionContract
      *
      * @var array
      */
-    protected $fillable = ['subject','ids','last_message_id'];
+    protected $fillable = ['subject','ids'];
 
     /**
      * The attributes that should be mutated to dates.
@@ -103,13 +103,6 @@ class Discussion extends Model implements DiscussionContract
     {
         return $this->hasMany(
             config('messenger.participations.model', Participation::class)
-        );
-    }
-
-    public function lastMessage()
-    {
-        return $this->hasOne(
-            config('messenger.messages.model', Message::class), 'id', 'last_message_id'
         );
     }
 
