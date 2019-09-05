@@ -13,12 +13,13 @@ class Discussion extends Item
     public function toArray($request)
     {
         return [
-            'id' => $this->_id,
-            'subject' => $this->subject,
-            'members' => Participation::collection($this->participations),
-            'author' => new User( $this->author ),
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'id'          => $this->_id,
+            'subject'     => $this->subject,
+            'members'     => Participation::collection($this->participations),
+            'author'      => new User( $this->author ),
+            'lastMessage' => new Message( $this->lastMessage ),
+            'created_at'  => $this->created_at,
+            'updated_at'  => $this->updated_at,
         ];
     }
 }

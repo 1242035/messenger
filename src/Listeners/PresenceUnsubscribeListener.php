@@ -16,14 +16,14 @@ class PresenceUnsubscribeListener extends Base
     public function handle(PresenceUnsubscribe $event)
     {
         logger()->info('PresenceUnsubscribeListener start');
-        
+
 
         $connection = $event->connection;
         $payload    = $event->request;
 
         if( isset( $connection ) && isset( $payload ) )
         {
-            try 
+            try
             {
                 $channelData = json_decode($payload->channel_data);
 
@@ -32,15 +32,12 @@ class PresenceUnsubscribeListener extends Base
                 $connectionInfo = json_decode(json_encode($channelData->user_info) );
 
                 //logger()->error('PresenceUnsubscribeListener connectionInfo type:' . gettype($connectionInfo)  );
-
-               
-               // $connectionInfo  = isset( $payload->channel_data->user_info ) ? $payload->channel_data->user_info : null;
                 if( isset( $connectionInfo  ) )
                 {
                     $discussionId = $connectionInfo->discussion_id;
                     $userId       = $connectionInfo->id;
                     //logger()->error('PresenceUnsubscribeListener connectionInfo :' . $discussionId . ' => ' . $userId);
-                    
+
                     $discussion = Discussion::notDeleted()->findOrFail( $discussionId );
                     $participations = $discussion->participations;
                     foreach($participations as $participation)
@@ -53,7 +50,7 @@ class PresenceUnsubscribeListener extends Base
                             break;
                         }
                     }
-                    
+
                 }
             }
             catch(\Exception $e)

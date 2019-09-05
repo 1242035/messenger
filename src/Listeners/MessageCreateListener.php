@@ -18,7 +18,10 @@ class MessageCreateListener extends Base
         $message = $event->message;
         if( isset( $message ) )
         {
+            //add last message to disccusion
+            $discussion = $event->discussion;
             //logger()->info('MessageCreateListener message: ' .json_encode($message));
+            //add last message to discussion member
             $participations = $message->participations;
             if( isset( $participations ) && count( $participations ) > 0 )
             {
@@ -26,8 +29,14 @@ class MessageCreateListener extends Base
                 {
                     $participation->last_message_id = $message->id;
                     $participation->save();
+                    //push braodcast to member channel
+                    event( new \Viauco\Messenger\Events\MessageCreateToMember($message, $participation->participable_id) );
                 }
             }
+
+            $notify = new \Viauco\Messenger\Notifications\Message( $event );
+
+            $message->notify( $notify );
         }
         //logger()->info('MessageCreateListener end');
     }

@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace Viauco\Messenger\Models;
 
 use Viauco\Messenger\Contracts\Discussion as DiscussionContract;
@@ -11,7 +11,7 @@ use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
-/** 
+/**
  * Class     Discussion
  *
  * @package  Viauco\Messenger\Models
@@ -52,7 +52,7 @@ class Discussion extends Model implements DiscussionContract
      *
      * @var array
      */
-    protected $fillable = ['subject','ids'];
+    protected $fillable = ['subject','ids','last_message_id'];
 
     /**
      * The attributes that should be mutated to dates.
@@ -80,7 +80,7 @@ class Discussion extends Model implements DiscussionContract
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        
+
         if( null !== config('messenger.discussions.connection') )
         {
             $this->setConnection(config('messenger.discussions.connection'));
@@ -103,6 +103,13 @@ class Discussion extends Model implements DiscussionContract
     {
         return $this->hasMany(
             config('messenger.participations.model', Participation::class)
+        );
+    }
+
+    public function lastMessage()
+    {
+        return $this->hasOne(
+            config('messenger.messages.model', Message::class), 'id', 'last_message_id'
         );
     }
 
