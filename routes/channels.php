@@ -11,17 +11,22 @@
 |
 */
 
-Broadcast::channel('public', function ($user) 
+Broadcast::channel('public', function ($user)
 {
     return true;
 });
 
-Broadcast::channel('discussion-{id}', function ($user, $discussionId) 
+Broadcast::channel('user-{id}', function ($user, $userId)
 {
-    return ['id' => $user->id, 'email' => $user->email, 'discussion_id' => $discussionId];
+    return ['id' => $user->id, 'email' => $user->email, 'first_name' => $user->first_name, 'last_name' => $user->last_name, 'avatar' => $user->cover];
 });
 
-Broadcast::channel('message-{id}', function ($user, $id) 
+Broadcast::channel('discussion-{id}', function ($user, $discussionId)
 {
-    return ['id' => $user->id, 'email' => $user->email, 'discussion_id' => $discussionId];
+    return ['id' => $user->id, 'email' => $user->email, 'first_name' => $user->first_name, 'last_name' => $user->last_name, 'avatar' => $user->cover, 'discussion_id' => $discussionId];
+});
+
+Broadcast::channel('message-{id}', function ($user, $id)
+{
+    return ['id' => $user->id, 'email' => $user->email, 'first_name' => $user->first_name, 'last_name' => $user->last_name, 'avatar' => $user->cover, 'discussion_id' => $discussionId];
 });

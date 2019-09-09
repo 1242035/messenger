@@ -2,7 +2,7 @@
 
 namespace Viauco\Messenger\Resources;
 
-class Message extends Item
+class Attachable extends Item
 {
     /**
      * Transform the resource into an array.
@@ -14,12 +14,10 @@ class Message extends Item
     {
         return [
             'id'         => $this->_id,
-            'body'       => $this->body,
+            'path'       => $this->path,
             'type'       => $this->type,
-            'attachments'=> Attachable::collection( $this->attachments ),
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'author'     => new User( $this->author ),
+            'mime'       => $this->mime,
+            'size'       => $this->size
         ];
     }
 }

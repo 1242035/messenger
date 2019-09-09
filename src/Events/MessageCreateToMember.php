@@ -1,5 +1,6 @@
 <?php
 namespace Viauco\Messenger\Events;
+use Illuminate\Broadcasting\PresenceChannel;
 
 class MessageCreateToMember extends UserChannel
 {

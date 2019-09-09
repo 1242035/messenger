@@ -18,7 +18,7 @@ class User extends Item
             'first_name' => $this->first_name,
             'last_name'  => $this->last_name,
             'full_name'  => $this->first_name . ' ' . $this->last_name,
-            'avatar'     => $this->avatar,
+            'avatar'     => $this->cover,
             'birthday'   => $this->birthday,
             'type'       => $this->type_register,
             'created_at' => $this->created_at,

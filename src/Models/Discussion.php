@@ -18,6 +18,7 @@ use Illuminate\Support\Collection;
  *
  * @property  int             id
  * @property  string          subject
+ * @property  string          ids
  * @property  \Carbon\Carbon  created_at
  * @property  \Carbon\Carbon  updated_at
  * @property  \Carbon\Carbon  deleted_at

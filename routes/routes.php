@@ -1,11 +1,11 @@
 <?php
 
-Route::group(['prefix' => '_conversations', 'namespace' => '\Viauco\Messenger\Controllers', 'middleware' => config('messenger.auth.middleware') ], function () 
+Route::group(['prefix' => '_conversations', 'namespace' => '\Viauco\Messenger\Controllers', 'middleware' => config('messenger.auth.middleware') ], function ()
 {
-    Route::group(['prefix' => 'discussions'], function () 
+    Route::group(['prefix' => 'discussions'], function ()
     {
-        Route::get('/fetch', ['as' => 'viauco_messenger_discussions_getOrCreate_get', 'uses' => 'DiscussionController@discussionGetOrCreate']);
-        Route::post('/fetch', ['as' => 'viauco_messenger_discussions_getOrCreate_post', 'uses' => 'DiscussionController@discussionGetOrCreate']);
+        Route::get('/get_or_create', ['as' => 'viauco_messenger_discussions_getOrCreate_get', 'uses' => 'DiscussionController@discussionGetOrCreate']);
+        Route::post('/get_or_create', ['as' => 'viauco_messenger_discussions_getOrCreate_post', 'uses' => 'DiscussionController@discussionGetOrCreate']);
 
         Route::post('/{discussionId}/participations/{participationId}', ['as' => 'viauco_messenger_discussions_participations_post', 'uses' => 'ParticipationController@participationPost']);
         Route::delete('/{discussionId}/participations/{participationId}', ['as' => 'viauco_messenger_discussions_participations_delete_id', 'uses' => 'ParticipationController@participationDelete']);
@@ -17,13 +17,13 @@ Route::group(['prefix' => '_conversations', 'namespace' => '\Viauco\Messenger\Co
         Route::delete('/{discussionId}/messages/{id}', ['as' => 'viauco_messenger_discussions_messages_delete_id', 'uses' => 'MessageController@messageDelete']);
         Route::get('/{discussionId}/messages', ['as' => 'viauco_messenger_discussions_messages_get', 'uses' => 'MessageController@messageGetAll']);
         Route::post('/{discussionId}/messages', ['as' => 'viauco_messenger_discussions_messages_post', 'uses' => 'MessageController@messagePost']);
-        
+
         Route::get('/{discussionId}', ['as' => 'viauco_messenger_discussions_get', 'uses' => 'DiscussionController@discussionGet']);
         Route::put('/{discussionId}', ['as' => 'viauco_messenger_discussions_put', 'uses' => 'DiscussionController@discussionPut']);
 
     });
 
-    Route::group(['prefix' => 'notifications'], function () 
+    Route::group(['prefix' => 'notifications'], function ()
     {
         Route::get('/', ['as' => 'viauco_messenger_notifications_index', 'uses' => 'NotificationController@index']);
     });

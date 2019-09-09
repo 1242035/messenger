@@ -21,7 +21,7 @@ class MessageText extends Base
     public function rules()
     {
         return [
-            'body' => 'required',
+            //'body' => 'required',
             'type' => 'required'
         ];
     }

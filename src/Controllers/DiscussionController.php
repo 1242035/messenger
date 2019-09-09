@@ -48,7 +48,20 @@ class DiscussionController extends Controller
                 $ids = explode(',', $ids);
             }catch(\Exception $e){}
 
+            if( ! isset( $ids ) ) {
+                return $this->_error( [
+                    'error' => 'invalid_params'
+                ] );
+            }
+            $ids = array_unique($ids);
+            
             asort( $ids );
+
+            if( count( $ids ) <= 1 ) {
+                return $this->_error( [
+                    'error' => 'invalid_params'
+                ] );
+            }
 
             $key = trim( trim( implode('_', $ids),'_') );
             if( empty( $key ) )
@@ -102,7 +115,7 @@ class DiscussionController extends Controller
 
             $user = $userClass::findOrFail( $request->user_id );
             $discussions = Discussion::forUser($user)->withParticipations()->orderBy('updated_at', 'DESC')->get();
-            
+
             return $this->_success( DiscussionItemResource::collection( $discussions )  );
         }
         catch(\Exception $e)

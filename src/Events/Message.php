@@ -9,15 +9,18 @@ class Message extends Broadcast
 
     public $message;
 
-    public function __construct($request, $message)
+    public $discussion;
+
+    public function __construct($request, $message, $discussion)
     {
         $this->request    = $request;
         $this->message    = $message;
+        $this->discussion = $discussion;
     }
 
     public function broadcastOn()
     {
-        return new PresenceChannel( 'discussion-'. $this->message->discussion->getKey() );
+        return new PresenceChannel( 'discussion-'. $this->discussion->id );
     }
 
     public function broadcastAs()

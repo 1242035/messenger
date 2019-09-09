@@ -1,6 +1,7 @@
 <?php
 namespace Viauco\Messenger\Listeners;
 
+use Viauco\Messenger\Models\Discussion;
 use Viauco\Messenger\Events\Socket\PresenceSubscribe;
 
 class PresenceSubscribeListener extends Base
@@ -32,6 +33,7 @@ class PresenceSubscribeListener extends Base
                     $userId       = $connectionInfo->id;
 
                     $discussion = Discussion::notDeleted()->findOrFail( $discussionId );
+                    
                     $participations = $discussion->participations;
                     foreach($participations as $participation)
                     {
