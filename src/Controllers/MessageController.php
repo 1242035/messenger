@@ -50,8 +50,10 @@ class MessageController extends Controller
 
             if( isset( $params->attachments ) )
             {
-                foreach ( $params->attachments as $key => $attach) {
-                    $message->attachments()->save($attach);
+                foreach ( $params->attachments as $key => $attach)
+                {
+                    $attachable = new Attachable($attach);
+                    $message->addAttachable($attachable);
                 }
             }
 

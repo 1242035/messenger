@@ -15,8 +15,8 @@ class Notification extends Item
             'id'         => $this->_id,
             'subject'    => $this->subject,
             'body'       => $this->body,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'createdAt'  => $this->created_at,
+            'updatedAt'  => $this->updated_at,
         ];
     }
 }

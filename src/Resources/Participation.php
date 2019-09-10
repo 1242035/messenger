@@ -15,11 +15,11 @@ class Participation extends Item
         return [
             'id'            => $this->_id,
             'user'          => new User($this->participable),
-            'discussion_id' => $this->discussion_id,
-            'last_online'   => $this->last_active,
-            'last_message'  => new Message($this->message),
-            'created_at'    => $this->created_at,
-            'updated_at'    => $this->updated_at,
+            'discussionId' => $this->discussion_id,
+            'lastOnline'   => $this->last_active,
+            'lastMessage'  => new Message($this->message),
+            'createdAt'    => $this->created_at,
+            'updatedAt'    => $this->updated_at,
         ];
     }
 }

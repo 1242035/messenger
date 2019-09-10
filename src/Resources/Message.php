@@ -17,8 +17,9 @@ class Message extends Item
             'body'       => $this->body,
             'type'       => $this->type,
             'attachments'=> Attachable::collection( $this->attachments ),
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'isRead'    => false,
+            'createdAt' => $this->created_at,
+            'updatedAt' => $this->updated_at,
             'author'     => new User( $this->author ),
         ];
     }

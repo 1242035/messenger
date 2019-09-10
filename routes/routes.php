@@ -20,6 +20,7 @@ Route::group(['prefix' => '_conversations', 'namespace' => '\Viauco\Messenger\Co
 
         Route::get('/{discussionId}', ['as' => 'viauco_messenger_discussions_get', 'uses' => 'DiscussionController@discussionGet']);
         Route::put('/{discussionId}', ['as' => 'viauco_messenger_discussions_put', 'uses' => 'DiscussionController@discussionPut']);
+        Route::delete('/{discussionId}', ['as' => 'viauco_messenger_discussions_delete', 'uses' => 'DiscussionController@discussionDelete']);
 
     });
 

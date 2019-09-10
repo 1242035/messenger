@@ -54,7 +54,7 @@ class DiscussionController extends Controller
                 ] );
             }
             $ids = array_unique($ids);
-            
+
             asort( $ids );
 
             if( count( $ids ) <= 1 ) {
@@ -64,12 +64,14 @@ class DiscussionController extends Controller
             }
 
             $key = trim( trim( implode('_', $ids),'_') );
+
             if( empty( $key ) )
             {
                 return $this->_error( [
                     'error' => 'invalid_params'
                 ] );
             }
+
             $discussion = Discussion::where(['ids' => $key])->first();
 
             if( ! isset( $discussion ) )
@@ -117,6 +119,23 @@ class DiscussionController extends Controller
             $discussions = Discussion::forUser($user)->withParticipations()->orderBy('updated_at', 'DESC')->get();
 
             return $this->_success( DiscussionItemResource::collection( $discussions )  );
+        }
+        catch(\Exception $e)
+        {
+            logger()->error( $e );
+
+            return $this->_error($e);
+        }
+    }
+
+    public function discussionDelete($discussionId)
+    {
+        try
+        {
+            $discussion = Discussion::findOrFail($discussionId);
+            $record = new DiscussionItemResource( $discussion );
+            $discussion->delete();
+            return $this->_success( new DiscussionItemResource( $record ) );
         }
         catch(\Exception $e)
         {

@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace Viauco\Messenger\Contracts;
 
 /**
@@ -46,22 +46,4 @@ interface Message
      */
     public function participable();
 
-    /**
-     * Participations relationship.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function participations();
-
-    /* -----------------------------------------------------------------
-     |  Getters & Setters
-     | -----------------------------------------------------------------
-     */
-
-    /**
-     * Recipients of this message.
-     *
-     * @return \Illuminate\Database\Eloquent\Collection
-     */
-    public function getRecipientsAttribute();
 }

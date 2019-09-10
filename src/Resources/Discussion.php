@@ -18,8 +18,9 @@ class Discussion extends Item
             'members'       => Participation::collection($this->participations),
             'author'        => new User( $this->author ),
             'latestMessage' => new Message( $this->latestMessage ),
-            'created_at'    => $this->created_at,
-            'updated_at'    => $this->updated_at,
+            'isGroup'       => count( $this->participations ) > 2 ? true : false,
+            'createdAt'    => $this->created_at,
+            'updatedAt'    => $this->updated_at,
         ];
     }
 }

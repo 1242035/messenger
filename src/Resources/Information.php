@@ -14,10 +14,10 @@ class Information extends Item
     {
         return [
             'id' => $this->_id,
-            'last_active' => $this->last_active,
-            'last_message_id' => Message::collection($this->message),
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'lastActive' => $this->last_active,
+            'lastMessage' => Message::collection($this->message),
+            'createdAt' => $this->created_at,
+            'updatedAt' => $this->updated_at,
         ];
     }
 }

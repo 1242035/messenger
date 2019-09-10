@@ -35,7 +35,7 @@ class Message extends Model implements MessageContract
      *
      * @var array
      */
-    protected $touches = ['discussion'];
+    protected $touches = ['discussions'];
 
     /**
      * The attributes that can be set with Mass Assignment.
@@ -45,8 +45,7 @@ class Message extends Model implements MessageContract
     protected $fillable = [
         'discussion_id',
         'body',
-        'type',
-        'creator_id'
+        'type'
     ];
 
      /**
@@ -79,7 +78,7 @@ class Message extends Model implements MessageContract
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        
+
         if( null !== config('messenger.messages.connection') )
         {
             $this->setConnection(config('messenger.messages.connection'));
@@ -126,6 +125,11 @@ class Message extends Model implements MessageContract
         return $this->morphTo();
     }
 
+    public function attachable()
+    {
+        return $this->morphTo();
+    }
+
     public function attachments()
     {
         return $this->morphToMany(config('messenger.attachments.model', Attachable::class), 'attachable');
@@ -136,32 +140,79 @@ class Message extends Model implements MessageContract
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function participations()
-    {
-        return $this->hasMany(
-            config('messenger.participations.model', Participation::class),
-            'discussion_id',
-            'discussion_id'
-        );
-    }
+     /**
+      * Add a participable to discussion.
+      *
+      * @param  \Illuminate\Database\Eloquent\Model  $participable
+      *
+      * @return \Viauco\Messenger\Models\Participation|mixed
+      */
+     public function addAttachable(EloquentModel $attachable)
+     {
+         $morph = config('messenger.attachables.morph', 'attachable');
 
-    /* -----------------------------------------------------------------
-     |  Getters & Setters
-     | -----------------------------------------------------------------
-     */
+         return $this->attachments()->firstOrCreate([
+             "{$morph}_id"   => $participable->getKey(),
+             "{$morph}_type" => $participable->getMorphClass(),
+             'message_id' => $this->id,
+         ]);
+     }
 
-    /**
-     * Recipients of this message.
-     *
-     * @return \Illuminate\Database\Eloquent\Collection
-     */
-    public function getRecipientsAttribute()
-    {
-        $morph = config('messenger.users.morph', 'participable');
+     /**
+      * Add many participables to discussion.
+      *
+      * @param  \Illuminate\Support\Collection|array  $participables
+      *
+      * @return \Illuminate\Database\Eloquent\Collection
+      */
+     public function addAttachables($attachables)
+     {
+         foreach ($attachables as $attachable) {
+             $this->addAttachable($attachable);
+         }
 
-        return $this->participations->reject(function (Participation $participant) use ($morph) {
-            return $participant->getAttribute("{$morph}_id") === $this->getAttribute("{$morph}_id")
-                && $participant->getAttribute("{$morph}_type") === $this->getAttribute("{$morph}_type");
-        });
-    }
+         return $this->attachments;
+     }
+
+     /**
+      * Remove a participable from discussion.
+      *
+      * @param  \Illuminate\Database\Eloquent\Model  $participable
+      * @param  bool                                 $reload
+      *
+      * @return int
+      */
+     public function removeAttachable(EloquentModel $attachable, $reload = true)
+     {
+         return $this->removeAttachables([$attachable], $reload);
+     }
+
+     /**
+      * Remove many participables from discussion.
+      *
+      * @param  \Illuminate\Support\Collection|array  $participables
+      * @param  bool   $reload
+      *
+      * @return int
+      */
+     public function removeAttachables($attachables, $reload = true)
+     {
+         $morph   = config('messenger.attachable.morph', 'attachable');
+         $deleted = 0;
+
+         foreach ($attachables as $attachable) {
+             /** @var  \Illuminate\Database\Eloquent\Model  $participable */
+             $deleted += $this->attachments()
+                 ->where("{$morph}_type", '=', $attachable->getMorphClass())
+                 ->where("{$morph}_id", '=', $attachable->getKey())
+                 ->where('message_id', '=', $this->id)
+                 ->delete();
+         }
+
+         if ($reload) {
+             $this->load(['attachments']);
+         }
+
+         return $deleted;
+     }
 }
