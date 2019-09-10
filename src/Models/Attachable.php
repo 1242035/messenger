@@ -45,7 +45,8 @@ class Attachable extends Model implements AttachmentContract
         'path',
         'mime',
         'size',
-        'type',
+        'origin',
+        'ext'
     ];
 
     /**
@@ -78,7 +79,7 @@ class Attachable extends Model implements AttachmentContract
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        
+
         if( null !== config('messenger.attachments.connection') )
         {
             $this->setConnection(config('messenger.attachments.connection'));

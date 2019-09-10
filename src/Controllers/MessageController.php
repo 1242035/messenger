@@ -3,6 +3,7 @@ namespace Viauco\Messenger\Controllers;
 
 use Viauco\Messenger\Models\Discussion;
 use Viauco\Messenger\Models\Message;
+use Viauco\Messenger\Models\Attachable;
 use Viauco\Messenger\Resources\Message as MessageItemResource;
 use Viauco\Messenger\Resources\Discussion as DiscussionItemResource;
 use Viauco\Messenger\Resources\MessageCollection;
@@ -48,12 +49,13 @@ class MessageController extends Controller
 
             $discussion->messages()->save( $message );
 
-            if( isset( $params->attachments ) )
+            if( isset( $params['attachments'] ) )
             {
-                foreach ( $params->attachments as $key => $attach)
+
+                foreach ( $params['attachments'] as $key => $attach)
                 {
                     $attachable = new Attachable($attach);
-                    $message->addAttachable($attachable);
+                    $message->attachments()->save($attachable);
                 }
             }
 

@@ -15,9 +15,10 @@ class Attachable extends Item
         return [
             'id'         => $this->_id,
             'path'       => $this->path,
-            'type'       => $this->type,
+            'url'        => config('settings.config_storage_domain') . $this->path,
             'mime'       => $this->mime,
-            'size'       => $this->size
+            'size'       => $this->size,
+            'ext'        => $this->ext,
         ];
     }
 }

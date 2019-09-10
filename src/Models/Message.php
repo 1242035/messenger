@@ -35,7 +35,7 @@ class Message extends Model implements MessageContract
      *
      * @var array
      */
-    protected $touches = ['discussions'];
+    protected $touches = ['discussion'];
 
     /**
      * The attributes that can be set with Mass Assignment.
@@ -125,14 +125,9 @@ class Message extends Model implements MessageContract
         return $this->morphTo();
     }
 
-    public function attachable()
-    {
-        return $this->morphTo();
-    }
-
     public function attachments()
     {
-        return $this->morphToMany(config('messenger.attachments.model', Attachable::class), 'attachable');
+        return $this->morphMany(config('messenger.attachments.model', Attachable::class), 'attachable');
     }
 
     /**
