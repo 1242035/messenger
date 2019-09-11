@@ -18,10 +18,21 @@ class MessageController extends Controller
             $params = request()->all();
 
             if( ! isset( $params['per_page'] ) ){ $params['per_page'] = config('messenger.messages.piginate.limit'); }
-
+            $params['page'] = (int)$params['page'];
             $discussion = Discussion::notDeleted()->findOrFail($discussionId);
 
-            $messages = $discussion->messages()->orderBy('updated_at','DESC')->paginate($params['per_page']);
+            $messages = $discussion->messages()->where(function ($query) use ($params) {
+                if( isset( $params['time_end'] ) )
+                {
+                    $time = \Carbon\Carbon::now();
+                    try {
+                        $time = \Carbon\Carbon::parse($params['time_end']);
+                    } catch(\Exception $e){
+                        logger()->error('MessageController messageGetAll ', ['exception' => $e]);
+                    }
+                    $query->where('updated_at', '<=', $time);
+                }
+            })->orderBy('updated_at','DESC')->paginate((int)$params['per_page']);
 
             return $this->_success( new MessageCollection( $messages ) );
         }
@@ -55,6 +66,7 @@ class MessageController extends Controller
                 foreach ( $params['attachments'] as $key => $attach)
                 {
                     $attachable = new Attachable($attach);
+                    $attachable->discussion_id = $discussion->id;
                     $message->attachments()->save($attachable);
                 }
             }

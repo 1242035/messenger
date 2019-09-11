@@ -6,6 +6,7 @@ Route::group(['prefix' => '_conversations', 'namespace' => '\Viauco\Messenger\Co
     {
         Route::get('/get_or_create', ['as' => 'viauco_messenger_discussions_getOrCreate_get', 'uses' => 'DiscussionController@discussionGetOrCreate']);
         Route::post('/get_or_create', ['as' => 'viauco_messenger_discussions_getOrCreate_post', 'uses' => 'DiscussionController@discussionGetOrCreate']);
+        Route::get('/trash', ['as' => 'viauco_messenger_discussions_trash_get', 'uses' => 'DiscussionController@discussionGetTrash']);
 
         Route::post('/{discussionId}/participations/{participationId}', ['as' => 'viauco_messenger_discussions_participations_post', 'uses' => 'ParticipationController@participationPost']);
         Route::delete('/{discussionId}/participations/{participationId}', ['as' => 'viauco_messenger_discussions_participations_delete_id', 'uses' => 'ParticipationController@participationDelete']);
@@ -18,9 +19,11 @@ Route::group(['prefix' => '_conversations', 'namespace' => '\Viauco\Messenger\Co
         Route::get('/{discussionId}/messages', ['as' => 'viauco_messenger_discussions_messages_get', 'uses' => 'MessageController@messageGetAll']);
         Route::post('/{discussionId}/messages', ['as' => 'viauco_messenger_discussions_messages_post', 'uses' => 'MessageController@messagePost']);
 
+        Route::get('/{discussionId}/attachments', ['as' => 'viauco_messenger_discussions_attachments_get', 'uses' => 'AttachmentController@getAll']);
+        Route::delete('/{discussionId}/trash', ['as' => 'viauco_messenger_discussions_trash_post', 'uses' => 'DiscussionController@discussionTrash']);
+        Route::post('/{discussionId}/restore', ['as' => 'viauco_messenger_discussions_restore', 'uses' => 'DiscussionController@discussionRestore']);
         Route::get('/{discussionId}', ['as' => 'viauco_messenger_discussions_get', 'uses' => 'DiscussionController@discussionGet']);
         Route::put('/{discussionId}', ['as' => 'viauco_messenger_discussions_put', 'uses' => 'DiscussionController@discussionPut']);
-        Route::delete('/{discussionId}', ['as' => 'viauco_messenger_discussions_delete', 'uses' => 'DiscussionController@discussionDelete']);
 
     });
 

@@ -21,6 +21,26 @@ class DiscussionController extends Controller
         }
     }
 
+    public function discussionGetTrash()
+    {
+        try
+        {
+            $params = request()->all();
+
+            if( ! isset( $params['per_page'] ) ){ $params['per_page'] = config('messenger.discussions.piginate.limit'); }
+
+            $discussions = Discussion::onlyTrashed()->orderBy('updated_at','DESC')->paginate($params['per_page']);
+
+            return $this->_success( DiscussionItemResource::collection( $discussions ) );
+        }
+        catch(\Exception $e)
+        {
+            logger()->error( $e );
+
+            return $this->_error($e);
+        }
+    }
+
     public function discussionPut(Discussion $discussion)
     {
         try
@@ -96,7 +116,11 @@ class DiscussionController extends Controller
                 $discussion->save();
 
                 event( new \Viauco\Messenger\Events\DiscussionCreate( request()->all(), $discussion ) );
-
+            }
+            else
+            {
+                $discussion->deleted_at = null;
+                $discussion->save();
             }
 
             return $this->_success( new DiscussionItemResource($discussion) );
@@ -116,7 +140,7 @@ class DiscussionController extends Controller
             $userClass = config('messenger.users.model');
 
             $user = $userClass::findOrFail( $request->user_id );
-            $discussions = Discussion::forUser($user)->withParticipations()->orderBy('updated_at', 'DESC')->get();
+            $discussions = Discussion::notDeleted()->forUser($user)->withParticipations()->orderBy('updated_at', 'DESC')->get();
 
             return $this->_success( DiscussionItemResource::collection( $discussions )  );
         }
@@ -128,7 +152,24 @@ class DiscussionController extends Controller
         }
     }
 
-    public function discussionDelete($discussionId)
+    public function discussionTrash($discussionId)
+    {
+        try
+        {
+            $discussion = Discussion::findOrFail($discussionId);
+            $record = new DiscussionItemResource( $discussion );
+            $discussion->delete();
+            return $this->_success( new DiscussionItemResource( $record ) );
+        }
+        catch(\Exception $e)
+        {
+            logger()->error( $e );
+
+            return $this->_error($e);
+        }
+    }
+
+    public function discussionRestore($discussionId)
     {
         try
         {

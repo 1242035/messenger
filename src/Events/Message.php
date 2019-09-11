@@ -3,7 +3,7 @@ namespace Viauco\Messenger\Events;
 
 use Illuminate\Broadcasting\PresenceChannel;
 
-class Message extends Broadcast
+class Message extends BroadcastNow
 {
     public $request;
 

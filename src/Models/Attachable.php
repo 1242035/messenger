@@ -3,7 +3,7 @@ namespace Viauco\Messenger\Models;
 
 use Viauco\Messenger\Contracts\Attachment as AttachmentContract;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use Illuminate\Database\Eloquent\Builder;
 /**
  * Class     Participant
  *
@@ -42,6 +42,7 @@ class Attachable extends Model implements AttachmentContract
     protected $fillable = [
         'attchable_type',
         'attachable_id',
+        'discussion_id',
         'path',
         'mime',
         'size',
@@ -111,5 +112,10 @@ class Attachable extends Model implements AttachmentContract
     public function participable()
     {
         return $this->morphTo();
+    }
+
+    public function scopeForDiscussion(Builder $query, $discussionId)
+    {
+        return $query->where("discussion_id", '=', $discussionId);
     }
 }
