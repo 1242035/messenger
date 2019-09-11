@@ -53,7 +53,7 @@ class Discussion extends Model implements DiscussionContract
      *
      * @var array
      */
-    protected $fillable = ['subject','ids'];
+    protected $fillable = ['subject','ids', ''];
 
     /**
      * The attributes that should be mutated to dates.
@@ -129,12 +129,21 @@ class Discussion extends Model implements DiscussionContract
         return $this->participable();
     }
 
+    public function avatar()
+    {
+        return $this->attachable();
+    }
     /**
      * Participable relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
     public function participable()
+    {
+        return $this->morphTo();
+    }
+
+    public function attachable()
     {
         return $this->morphTo();
     }

@@ -14,15 +14,15 @@ class ParticipationController extends Controller
         try
         {
             $params = request()->all();
-            
+
             if( ! isset( $params['per_page'] ) ){ $params['per_page'] = config('messenger.messages.piginate.limit'); }
 
             $discussions = Discussion::notDeleted()->findOrFail($discussionId);
-            
+
             $participations = $discussions->participations()->notDeleted()->paginate($params['per_page']);
-            
+
             return $this->_success( ( new ParticipationCollection( $participations ) ) );
-            
+
         }
         catch(\Exception $e)
         {
@@ -31,15 +31,15 @@ class ParticipationController extends Controller
             return $this->_error($e);
         }
     }
-    
+
     public function participationGetId($discussionId, $participationId)
     {
         try
         {
             $participation = Participation::notDeleted()->findOrFail($participationId);
-            
+
             return $this->_success( new ParticipationItemResource( $participation ) );
-            
+
         }
         catch(\Exception $e)
         {
@@ -54,10 +54,21 @@ class ParticipationController extends Controller
         try
         {
             $userClass = config('messenger.users.model');
-            
+
             $user = $userClass::findOrFail($memberId);
 
             $discussion = Discussion::findOrFail($discussionId);
+
+            $ids = explode('_', $discussion->key);
+            $ids[] = $memberId;
+
+            $ids = array_unique($ids);
+
+            asort( $ids );
+
+            $key = trim( trim( implode('_', $ids),'_') );
+
+            $discussion->key = $key;
 
             $discussion->addParticipant($user);
 
@@ -78,7 +89,7 @@ class ParticipationController extends Controller
         try
         {
             $userClass = config('messenger.users.model');
-            
+
             $user = $userClass::findOrFail($memberId);
 
             $discussion = Discussion::findOrFail($discussionId);
