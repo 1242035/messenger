@@ -12,18 +12,18 @@ class AttachmentController extends Controller
         try
         {
             $params = request()->all();
-            if( ! isset( $params['per_page'] ) ){ $params['per_page'] = config('messenger.attachments.piginate.limit', 25); }
 
+            if( ! isset( $params['per_page'] ) ){ $params['per_page'] = config('messenger.attachments.piginate.limit', 25); }
+            if( ! isset( $params['page'] ) ){ $params['page'] = 1; }
             $params['page'] = (int)$params['page'];
+
             $type = null;
             try {
                 $type = explode(',', $params['type']);
                 if( ! is_array( $type ) ) {
                     $type = (array)$type;
                 }
-            }catch(\Exception $ee) {
-
-            }
+            }catch(\Exception $ee) {}
 
             $attachments = Attachable::notDeleted()
                                       ->forDiscussion($discussionId)
