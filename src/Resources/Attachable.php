@@ -18,7 +18,9 @@ class Attachable extends Item
             'url'        => config('settings.config_storage_domain') . $this->path,
             'mime'       => $this->mime,
             'size'       => $this->size,
+            'type'       => $this->type,
             'ext'        => $this->ext,
+            'origin'     => $this->origin,
         ];
     }
 }

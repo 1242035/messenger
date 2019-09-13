@@ -19,7 +19,7 @@ class Discussion extends Item
             'author'        => new User( $this->author ),
             'latestMessage' => new Message( $this->latestMessage ),
             'isGroup'       => count( $this->participations ) > 2 ? true : false,
-            'isRead'        => $this->isUnread(auth()->user()),
+            'isRead'        => null != auth()->user() ? $this->isUnread(auth()->user()) : false,
             'createdAt'     => $this->created_at,
             'updatedAt'     => $this->updated_at,
         ];

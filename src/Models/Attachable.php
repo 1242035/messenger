@@ -47,7 +47,8 @@ class Attachable extends Model implements AttachmentContract
         'mime',
         'size',
         'origin',
-        'ext'
+        'ext',
+        'type'
     ];
 
     /**
