@@ -14,8 +14,7 @@ class AttachmentController extends Controller
             $params = request()->all();
 
             if( ! isset( $params['per_page'] ) ){ $params['per_page'] = config('messenger.attachments.piginate.limit', 25); }
-            if( ! isset( $params['page'] ) ){ $params['page'] = 1; }
-            $params['page'] = (int)$params['page'];
+            if( ! isset( $params['page'] ) ){ $params['page'] = 1; } else { $params['page'] = (int)$params['page']; }
 
             $type = null;
             try {
@@ -33,7 +32,7 @@ class AttachmentController extends Controller
                                               $query->whereIn('type', (array)$type);
                                           }
                                       })
-                                      ->paginate((int)$params['per_page']);
+                                      ->simplePaginate((int)$params['per_page']);
 
             return $this->_success( new AttachableCollection( $attachments ) );
         }

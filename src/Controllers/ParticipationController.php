@@ -16,10 +16,11 @@ class ParticipationController extends Controller
             $params = request()->all();
 
             if( ! isset( $params['per_page'] ) ){ $params['per_page'] = config('messenger.messages.piginate.limit'); }
-
+            $params['page'] = isset( $params['page'] ) ? (int)$params['page'] : 1;
+            
             $discussions = Discussion::notDeleted()->findOrFail($discussionId);
 
-            $participations = $discussions->participations()->notDeleted()->paginate($params['per_page']);
+            $participations = $discussions->participations()->notDeleted()->simplePaginate((int)$params['per_page']);
 
             return $this->_success( ( new ParticipationCollection( $participations ) ) );
 

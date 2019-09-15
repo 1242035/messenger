@@ -28,8 +28,8 @@ class DiscussionController extends Controller
             $params = request()->all();
 
             if( ! isset( $params['per_page'] ) ){ $params['per_page'] = config('messenger.discussions.piginate.limit'); }
-
-            $discussions = Discussion::onlyTrashed()->orderBy('updated_at','DESC')->paginate($params['per_page']);
+            if( ! isset( $params['page'] ) ){ $params['page'] = 1; } else { $params['page'] = (int)$params['page']; }
+            $discussions = Discussion::onlyTrashed()->orderBy('updated_at','DESC')->simplePaginate((int)$params['per_page']);
 
             return $this->_success( DiscussionItemResource::collection( $discussions ) );
         }

@@ -18,7 +18,8 @@ class MessageController extends Controller
             $params = request()->all();
 
             if( ! isset( $params['per_page'] ) ){ $params['per_page'] = config('messenger.messages.piginate.limit'); }
-            $params['page'] = (int)$params['page'];
+            $params['page'] = isset( $params['page'] ) ? (int)$params['page'] : 1;
+
             $discussion = Discussion::notDeleted()->findOrFail($discussionId);
 
             $messages = $discussion->messages()->where(function ($query) use ($params) {
@@ -32,7 +33,10 @@ class MessageController extends Controller
                     }
                     $query->where('updated_at', '<=', $time);
                 }
-            })->orderBy('updated_at','DESC')->paginate((int)$params['per_page']);
+            })
+            // this very slow
+            //->orderBy('updated_at','DESC')
+            ->simplePaginate((int)$params['per_page']);
 
             return $this->_success( new MessageCollection( $messages ) );
         }

@@ -17,7 +17,7 @@ class Participation extends Item
             'user'          => new User($this->participable),
             'discussionId' => $this->discussion_id,
             'lastOnline'   => $this->last_active,
-            'lastMessage'  => new Message($this->message),
+            //'lastMessage'  => new Message($this->message),
             'createdAt'    => $this->created_at,
             'updatedAt'    => $this->updated_at,
         ];
