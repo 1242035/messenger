@@ -1,6 +1,6 @@
 #create mongodb index
 
-db.discussions.createIndex({_id: 1, created_at: -1, updated_at: -1, ids: 1, participable_id: 1});
-db.messages.createIndex({_id: 1, created_at: -1, updated_at: -1, discussion_id: 1, type: 1, participable_id: 1});
-db.participations.createIndex({_id: 1, created_at: -1, updated_at: -1, discussion_id: 1, last_active: 1, participable_id: 1});
-db.attachments.createIndex({_id: 1, created_at: -1, updated_at: -1, attachable_id: 1, discussion_id: 1, path: 1, origin: 1, type: 1, mime: 1});
+db.discussions.createIndexes([{created_at: -1}, {updated_at: -1}, {ids: 1}, {participable_id: 1, participable_type: 1}]);
+db.messages.createIndexes([{ created_at: -1}, {updated_at: -1}, {discussion_id: 1}, {type: 1}, {participable_id: 1, participable_type: 1}]);
+db.participations.createIndexes([{created_at: -1}, {updated_at: -1}, {discussion_id: 1}, {last_active: 1}, {participable_id: 1, participable_type: 1}]);
+db.attachments.createIndexes([{created_at: -1}, {updated_at: -1}, {attachable_id: 1, attachable_type: 1}, {discussion_id: 1} ]);
