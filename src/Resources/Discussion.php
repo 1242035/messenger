@@ -16,7 +16,7 @@ class Discussion extends Item
             'id'            => $this->_id,
             'subject'       => $this->subject,
             'members'       => Participation::collection($this->participations),
-            'author'        => new User( $this->author ),
+            'author'        => isset($this->author) ? new User( $this->author ) : null,
             'latestMessage' => new Message( $this->latestMessage ),
             'isGroup'       => count( $this->participations ) > 2 ? true : false,
             'isRead'        => null != auth()->user() ? $this->isUnread(auth()->user()) : false,

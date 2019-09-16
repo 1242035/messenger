@@ -30,6 +30,16 @@ abstract class Model extends Eloquent
         parent::__construct($attributes);
     }
 
+    protected static function keyName()
+    {
+        return (new static)->getKeyName();
+    }
+
+    protected static function tableName()
+    {
+        return (new static)->getTable();
+    }
+
     /**
      * Scope Deleted associated with.
      *

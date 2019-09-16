@@ -35,8 +35,9 @@ class MessageController extends Controller
                 }
             })
             // this very slow
-            //->orderBy('updated_at','DESC')
+            ->orderBy('updated_at', 'DESC')
             ->simplePaginate((int)$params['per_page']);
+
 
             return $this->_success( new MessageCollection( $messages ) );
         }
@@ -77,7 +78,7 @@ class MessageController extends Controller
 
             $parsedMessage = new MessageItemResource( $message );
 
-            event( new \Viauco\Messenger\Events\MessageCreate( request()->all(), $parsedMessage, new DiscussionItemResource( $discussion ) ) );
+            event( new \Viauco\Messenger\Events\MessageCreate( $parsedMessage, $discussion->id ) );
 
             return $this->_success( new MessageItemResource( $parsedMessage ) );
         }

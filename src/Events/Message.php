@@ -5,22 +5,19 @@ use Illuminate\Broadcasting\PresenceChannel;
 
 class Message extends BroadcastNow
 {
-    public $request;
+    public $discussionId;
 
     public $message;
 
-    public $discussion;
-
-    public function __construct($request, $message, $discussion)
+    public function __construct($message, $discussionId)
     {
-        $this->request    = $request;
         $this->message    = $message;
-        $this->discussion = $discussion;
+        $this->discussionId = $discussionId;
     }
 
     public function broadcastOn()
     {
-        return new PresenceChannel( 'discussion-'. $this->discussion->id );
+        return new PresenceChannel( 'discussion-'. $this->discussionId );
     }
 
     public function broadcastAs()

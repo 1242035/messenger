@@ -140,7 +140,11 @@ class DiscussionController extends Controller
             $userClass = config('messenger.users.model');
 
             $user = $userClass::findOrFail( $request->user_id );
-            $discussions = Discussion::notDeleted()->forUser($user)->withParticipations()->orderBy('updated_at', 'DESC')->get();
+            $discussions = Discussion::notDeleted()
+                ->forUser($user)
+                //->withParticipations()
+                //->orderBy('updated_at', 'DESC')
+                ->get();
 
             return $this->_success( DiscussionItemResource::collection( $discussions )  );
         }

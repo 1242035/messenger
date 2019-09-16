@@ -4,14 +4,16 @@ use Illuminate\Broadcasting\PrivateChannel;
 
 class UserChannel extends Broadcast
 {
-    public $request;
+    public $data;
 
     public $channel;
 
-    public function __construct($request, $channel)
+    public $type = 'notification';
+
+    public function __construct($data, $channel)
     {
-        $this->request      = $request;
-        $this->channel      = $channel;
+        $this->data      = $data;
+        $this->channel   = $channel;
     }
 
     public function broadcastOn()

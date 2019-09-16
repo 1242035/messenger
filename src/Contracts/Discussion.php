@@ -104,13 +104,6 @@ interface Discussion
      | -----------------------------------------------------------------
      */
 
-    /**
-     * Get the latest_message attribute.
-     *
-     * @return \Viauco\Messenger\Models\Message
-     */
-    public function getLatestMessageAttribute();
-
     /* -----------------------------------------------------------------
      |  Main Methods
      | -----------------------------------------------------------------

@@ -147,8 +147,8 @@ class Message extends Model implements MessageContract
          $morph = config('messenger.attachables.morph', 'attachable');
 
          return $this->attachments()->firstOrCreate([
-             "{$morph}_id"   => $participable->getKey(),
-             "{$morph}_type" => $participable->getMorphClass(),
+             "{$morph}_id"   => $attachable->getKey(),
+             "{$morph}_type" => $attachable->getMorphClass(),
              'message_id' => $this->id,
          ]);
      }

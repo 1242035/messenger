@@ -53,7 +53,7 @@ class Discussion extends Model implements DiscussionContract
      *
      * @var array
      */
-    protected $fillable = ['subject','ids', ''];
+    protected $fillable = ['subject','ids', 'last_message_id'];
 
     /**
      * The attributes that should be mutated to dates.
@@ -146,6 +146,11 @@ class Discussion extends Model implements DiscussionContract
     public function attachable()
     {
         return $this->morphTo();
+    }
+
+    public function latestMessage()
+    {
+        return $this->hasOne(Message::class, Message::keyName(), 'last_message_id' );
     }
 
     /* -----------------------------------------------------------------
@@ -265,10 +270,7 @@ class Discussion extends Model implements DiscussionContract
      *
      * @return \Viauco\Messenger\Models\Message
      */
-    public function getLatestMessageAttribute()
-    {
-        return $this->messages->sortByDesc('created_at')->first();
-    }
+
 
     /**
      * Get the participations table name.
