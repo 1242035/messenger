@@ -16,7 +16,7 @@ class Message extends Item
             'id'         => $this->_id,
             'body'       => $this->body,
             'type'       => $this->type,
-            'attachments'=> in_array($this->type,['image', 'video', 'audio', 'file']) && $this->attachments != null ? Attachable::collection( $this->attachments->take(20) ) : [],
+            'attachments'=> in_array($this->type,['image', 'video', 'audio', 'file']) && $this->attachments != null ? Attachable::collection( $this->attachments ) : [],
             'createdAt'  => $this->created_at,
             'updatedAt'  => $this->updated_at,
             'author'     => new User( $this->author ),

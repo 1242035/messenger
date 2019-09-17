@@ -10,8 +10,11 @@ class AttachableCollection extends Collections
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
+
      public function toArray($request)
      {
+         //dd($this->collection);
+
          return [
 
              'meta' => [
@@ -23,7 +26,7 @@ class AttachableCollection extends Collections
                  'next' => $this->nextPageUrl(),
  				 'prev' => $this->previousPageUrl()
              ],
-             'items' => Attachable::collection($this->collection),
+             'items' => $this->collection
          ];
      }
 }

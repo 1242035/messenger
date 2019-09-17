@@ -63,11 +63,8 @@ class MessageController extends Controller
 
             $message->participable_type = request()->user()->getMorphClass();
 
-            $discussion->messages()->save( $message );
-
             if( isset( $params['attachments'] ) )
             {
-
                 foreach ( $params['attachments'] as $key => $attach)
                 {
                     $attachable = new Attachable($attach);
@@ -75,6 +72,8 @@ class MessageController extends Controller
                     $message->attachments()->save($attachable);
                 }
             }
+
+            $discussion->messages()->save( $message );
 
             $parsedMessage = new MessageItemResource( $message );
 

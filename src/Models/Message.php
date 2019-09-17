@@ -45,7 +45,7 @@ class Message extends Model implements MessageContract
     protected $fillable = [
         'discussion_id',
         'body',
-        'type'
+        'type',
     ];
 
      /**
@@ -62,7 +62,7 @@ class Message extends Model implements MessageContract
     protected $casts = [
         'id'              => 'string',
         'discussion_id'   => 'string',
-        'participable_id' => 'string'
+        'participable_id' => 'string',
     ];
 
     /* -----------------------------------------------------------------
@@ -142,7 +142,7 @@ class Message extends Model implements MessageContract
       *
       * @return \Viauco\Messenger\Models\Participation|mixed
       */
-     public function addAttachable(EloquentModel $attachable)
+     /*public function addAttachable(EloquentModel $attachable)
      {
          $morph = config('messenger.attachables.morph', 'attachable');
 
@@ -151,7 +151,7 @@ class Message extends Model implements MessageContract
              "{$morph}_type" => $attachable->getMorphClass(),
              'message_id' => $this->id,
          ]);
-     }
+     }*/
 
      /**
       * Add many participables to discussion.
@@ -160,14 +160,14 @@ class Message extends Model implements MessageContract
       *
       * @return \Illuminate\Database\Eloquent\Collection
       */
-     public function addAttachables($attachables)
+     /*public function addAttachables($attachables)
      {
          foreach ($attachables as $attachable) {
              $this->addAttachable($attachable);
          }
 
          return $this->attachments;
-     }
+     }*/
 
      /**
       * Remove a participable from discussion.
@@ -177,10 +177,10 @@ class Message extends Model implements MessageContract
       *
       * @return int
       */
-     public function removeAttachable(EloquentModel $attachable, $reload = true)
+     /*public function removeAttachable(EloquentModel $attachable, $reload = true)
      {
          return $this->removeAttachables([$attachable], $reload);
-     }
+     }*/
 
      /**
       * Remove many participables from discussion.
@@ -190,13 +190,12 @@ class Message extends Model implements MessageContract
       *
       * @return int
       */
-     public function removeAttachables($attachables, $reload = true)
+     /*public function removeAttachables($attachables, $reload = true)
      {
          $morph   = config('messenger.attachable.morph', 'attachable');
          $deleted = 0;
 
          foreach ($attachables as $attachable) {
-             /** @var  \Illuminate\Database\Eloquent\Model  $participable */
              $deleted += $this->attachments()
                  ->where("{$morph}_type", '=', $attachable->getMorphClass())
                  ->where("{$morph}_id", '=', $attachable->getKey())
@@ -209,5 +208,5 @@ class Message extends Model implements MessageContract
          }
 
          return $deleted;
-     }
+     }*/
 }
