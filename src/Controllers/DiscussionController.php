@@ -93,7 +93,7 @@ class DiscussionController extends Controller
             }
 
             $discussion = Discussion::where(['ids' => $key])->first();
-
+            
             if( ! isset( $discussion ) )
             {
 

@@ -12,14 +12,17 @@ class Discussion extends Item
      */
     public function toArray($request)
     {
+        $participations = $this->participations;
+        $user = auth()->user();
+        $author = $this->author;
         return [
             'id'            => $this->_id,
             'subject'       => $this->subject,
-            'members'       => Participation::collection($this->participations),
-            'author'        => isset($this->author) ? new User( $this->author ) : null,
+            'members'       => Participation::collection($participations),
+            'author'        => isset($author) ? new User( $author ) : null,
             'latestMessage' => new Message( $this->latestMessage ),
-            'isGroup'       => count( $this->participations ) > 2 ? true : false,
-            'isRead'        => null != auth()->user() ? $this->isUnread(auth()->user()) : false,
+            'isGroup'       => count( $participations ) > 2 ? true : false,
+            'isRead'        => null != $user ? $this->isUnread($user) : false,
             'createdAt'     => $this->created_at,
             'updatedAt'     => $this->updated_at,
         ];
