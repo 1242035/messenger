@@ -172,11 +172,9 @@ class Discussion extends Model implements DiscussionContract
     public function scopeForUser(Builder $query, EloquentModel $participable)
     {
         $table = $this->getParticipationsTable();
-
         return $query->join($table, function (JoinClause $join) use ($table, $participable) {
             $morph = config('messenger.users.morph', 'participable');
-
-            $join->on($this->getQualifiedKeyName(), '=', "{$table}.discussion_id")
+            return $join->on($this->getQualifiedKeyName(), '=', "{$table}.discussion_id")
                  ->where("{$table}.{$morph}_type", '=', $participable->getMorphClass())
                  ->where("{$table}.{$morph}_id", '=', $participable->getKey())
                  ->whereNull("{$table}.deleted_at");

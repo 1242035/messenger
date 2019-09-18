@@ -3,6 +3,7 @@ namespace Viauco\Messenger\Controllers;
 
 use Viauco\Messenger\Models\Discussion;
 use Viauco\Messenger\Resources\Discussion as DiscussionItemResource;
+use Viauco\Messenger\Resources\DiscussionCollection;
 
 class DiscussionController extends Controller
 {
@@ -29,9 +30,11 @@ class DiscussionController extends Controller
 
             if( ! isset( $params['per_page'] ) ){ $params['per_page'] = config('messenger.discussions.piginate.limit'); }
             if( ! isset( $params['page'] ) ){ $params['page'] = 1; } else { $params['page'] = (int)$params['page']; }
-            $discussions = Discussion::onlyTrashed()->orderBy('updated_at','DESC')->simplePaginate((int)$params['per_page']);
+            $discussions = Discussion::onlyTrashed()
+                            ->orderBy('updated_at','DESC')
+                            ->simplePaginate((int)$params['per_page']);
 
-            return $this->_success( DiscussionItemResource::collection( $discussions ) );
+            return $this->_success( new DiscussionCollection( $discussions ) );
         }
         catch(\Exception $e)
         {
@@ -93,7 +96,7 @@ class DiscussionController extends Controller
             }
 
             $discussion = Discussion::where(['ids' => $key])->first();
-            
+
             if( ! isset( $discussion ) )
             {
                 $arrMemberName = [];
@@ -144,16 +147,48 @@ class DiscussionController extends Controller
     {
         try
         {
+            $params = request()->all();
+
+            if( ! isset( $params['per_page'] ) ){ $params['per_page'] = config('messenger.discussions.piginate.limit'); }
+            if( ! isset( $params['page'] ) ){ $params['page'] = 1; } else { $params['page'] = (int)$params['page']; }
+
             $userClass = config('messenger.users.model');
 
             $user = $userClass::findOrFail( $request->user_id );
-            $discussions = Discussion::notDeleted()
+            $discussions = Discussion::
+                notDeleted()
                 ->forUser($user)
-                //->withParticipations()
-                //->orderBy('updated_at', 'DESC')
-                ->get();
+                ->orderBy('updated_at','DESC')
+                ->simplePaginate((int)$params['per_page']);
+            
+            return $this->_success( new DiscussionCollection( $discussions )  );
+        }
+        catch(\Exception $e)
+        {
+            logger()->error( $e );
 
-            return $this->_success( DiscussionItemResource::collection( $discussions )  );
+            return $this->_error($e);
+        }
+    }
+
+    public function searchTrashByUser(\Viauco\Messenger\Requests\DiscussionSearchByUser $request)
+    {
+        try
+        {
+            $params = request()->all();
+
+            if( ! isset( $params['per_page'] ) ){ $params['per_page'] = config('messenger.discussions.piginate.limit'); }
+            if( ! isset( $params['page'] ) ){ $params['page'] = 1; } else { $params['page'] = (int)$params['page']; }
+
+            $userClass = config('messenger.users.model');
+
+            $user = $userClass::findOrFail( $request->user_id );
+            $discussions = Discussion::onlyTrashed()
+                ->forUser($user)
+                ->orderBy('updated_at','DESC')
+                ->simplePaginate((int)$params['per_page']);
+
+            return $this->_success( new DiscussionCollection( $discussions )  );
         }
         catch(\Exception $e)
         {
@@ -169,6 +204,8 @@ class DiscussionController extends Controller
         {
             $discussion = Discussion::findOrFail($discussionId);
             $record = new DiscussionItemResource( $discussion );
+            $discussion->messages()->delete();
+            $discussion->participations()->delete();
             $discussion->delete();
             return $this->_success( new DiscussionItemResource( $record ) );
         }
@@ -186,7 +223,31 @@ class DiscussionController extends Controller
         {
             $discussion = Discussion::findOrFail($discussionId);
             $record = new DiscussionItemResource( $discussion );
-            $discussion->delete();
+            $discussion->messages()->restore();
+            $discussion->participations()->restore();
+            $discussion->restore();
+            return $this->_success( new DiscussionItemResource( $record ) );
+        }
+        catch(\Exception $e)
+        {
+            logger()->error( $e );
+
+            return $this->_error($e);
+        }
+    }
+
+    public function forceDelete($discussionId)
+    {
+        try
+        {
+            $discussion = Discussion::findOrFail($discussionId);
+            if( $discussion->author->id != auth()->user()->id ) {
+                return $this->_permissionDeny();
+            }
+            $record = new DiscussionItemResource( $discussion );
+            $discussion->messages()->forceDelete();
+            $discussion->participations()->forceDelete();
+            $discussion->forceDelete();
             return $this->_success( new DiscussionItemResource( $record ) );
         }
         catch(\Exception $e)

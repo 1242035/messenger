@@ -20,7 +20,8 @@ Route::group(['prefix' => '_conversations', 'namespace' => '\Viauco\Messenger\Co
         Route::post('/{discussionId}/messages', ['as' => 'viauco_messenger_discussions_messages_post', 'uses' => 'MessageController@messagePost']);
 
         Route::get('/{discussionId}/attachments', ['as' => 'viauco_messenger_discussions_attachments_get', 'uses' => 'AttachmentController@getAll']);
-        Route::delete('/{discussionId}/trash', ['as' => 'viauco_messenger_discussions_trash_post', 'uses' => 'DiscussionController@discussionTrash']);
+        Route::delete('/{discussionId}/trash', ['as' => 'viauco_messenger_discussions_trash_delete', 'uses' => 'DiscussionController@discussionTrash']);
+        Route::delete('/{discussionId}/delete', ['as' => 'viauco_messenger_discussions_delete_delete', 'uses' => 'DiscussionController@forceDelete']);
         Route::post('/{discussionId}/restore', ['as' => 'viauco_messenger_discussions_restore', 'uses' => 'DiscussionController@discussionRestore']);
         Route::post('/{discussionId}/mark_as_read', ['as' => 'viauco_messenger_discussions_mark_as_read_post', 'uses' => 'DiscussionController@markAsRead']);
         Route::get('/{discussionId}', ['as' => 'viauco_messenger_discussions_get', 'uses' => 'DiscussionController@discussionGet']);
@@ -35,8 +36,10 @@ Route::group(['prefix' => '_conversations', 'namespace' => '\Viauco\Messenger\Co
 
     Route::post('/auth', ['as' => 'viauco_messenger_conversations_auth', 'uses' => 'BroadcastController@auth']);
 
-    Route::post('/search/by_user', ['as' => 'viauco_messenger_discussions_participations_chatted_by_user_post', 'uses' => 'DiscussionController@searchByUser']);
-    Route::get('/search/by_user', ['as' => 'viauco_messenger_discussions_participations_chatted_by_user_get', 'uses' => 'DiscussionController@searchByUser']);
+    Route::get('/search/by_user/trash', ['as' => 'viauco_messenger_discussions_chatted_by_user_trash_get', 'uses' => 'DiscussionController@searchTrashByUser']);
+    Route::post('/search/by_user', ['as' => 'viauco_messenger_discussions_chatted_by_user_post', 'uses' => 'DiscussionController@searchByUser']);
+    Route::get('/search/by_user', ['as' => 'viauco_messenger_discussions_chatted_by_user_get', 'uses' => 'DiscussionController@searchByUser']);
+
 });
 
 //socket route
