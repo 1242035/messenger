@@ -22,6 +22,7 @@ Route::group(['prefix' => '_conversations', 'namespace' => '\Viauco\Messenger\Co
         Route::get('/{discussionId}/attachments', ['as' => 'viauco_messenger_discussions_attachments_get', 'uses' => 'AttachmentController@getAll']);
         Route::delete('/{discussionId}/trash', ['as' => 'viauco_messenger_discussions_trash_post', 'uses' => 'DiscussionController@discussionTrash']);
         Route::post('/{discussionId}/restore', ['as' => 'viauco_messenger_discussions_restore', 'uses' => 'DiscussionController@discussionRestore']);
+        Route::post('/{discussionId}/mark_as_read', ['as' => 'viauco_messenger_discussions_mark_as_read_post', 'uses' => 'DiscussionController@markAsRead']);
         Route::get('/{discussionId}', ['as' => 'viauco_messenger_discussions_get', 'uses' => 'DiscussionController@discussionGet']);
         Route::put('/{discussionId}', ['as' => 'viauco_messenger_discussions_put', 'uses' => 'DiscussionController@discussionPut']);
 

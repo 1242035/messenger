@@ -67,7 +67,10 @@ class Discussion extends Model implements DiscussionContract
      *
      * @var array
      */
-
+    protected $casts = [
+        'last_message_id' => 'string',
+        'ids' => 'string'
+    ];
     /* -----------------------------------------------------------------
      |  Constructor
      | -----------------------------------------------------------------
@@ -413,6 +416,7 @@ class Discussion extends Model implements DiscussionContract
      */
     public function markAsRead(EloquentModel $participable)
     {
+
         if ($participant = $this->getParticipationByParticipable($participable)) {
             return $participant->update(['last_read' => Carbon::now()]);
         }

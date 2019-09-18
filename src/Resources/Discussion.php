@@ -20,9 +20,9 @@ class Discussion extends Item
             'subject'       => $this->subject,
             'members'       => Participation::collection($participations),
             'author'        => isset($author) ? new User( $author ) : null,
-            'latestMessage' => new Message( $this->latestMessage ),
+            'latestMessage' => new LastMessage( $this->latestMessage ),
             'isGroup'       => count( $participations ) > 2 ? true : false,
-            'isRead'        => null != $user ? $this->isUnread($user) : false,
+            'unRead'        => null != $user ? $this->isUnread($user) : false,
             'createdAt'     => $this->created_at,
             'updatedAt'     => $this->updated_at,
         ];

@@ -2,7 +2,7 @@
 
 namespace Viauco\Messenger\Resources;
 
-class Message extends Item
+class LastMessage extends Item
 {
     /**
      * Transform the resource into an array.
@@ -16,7 +16,6 @@ class Message extends Item
             'id'         => $this->_id,
             'body'       => $this->body,
             'type'       => $this->type,
-            'attachments'=> in_array($this->type,['image', 'video', 'audio', 'file']) && $this->attachments != null ? new AttachableCollection( $this->attachments()->simplePaginate(1) ) : [],
             'createdAt'  => $this->created_at,
             'updatedAt'  => $this->updated_at,
             'author'     => new User( $this->author ),

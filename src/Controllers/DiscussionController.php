@@ -96,6 +96,7 @@ class DiscussionController extends Controller
             
             if( ! isset( $discussion ) )
             {
+                $arrMemberName = [];
 
                 $discussion = Discussion::create([
                     'ids' => $key
@@ -110,9 +111,15 @@ class DiscussionController extends Controller
                 $userClass = config('messenger.users.model');
 
                 $users = $userClass::whereIn(( new $userClass )->getKeyName(), $ids )->get();
+                foreach($users as $user){
+                    $arrMemberName[] = $user->fullName;
+                }
 
                 $discussion->addParticipants($users);
 
+                if( count( $arrMemberName ) > 0  ) {
+                    $discussion->subject = implode(', ', $arrMemberName);
+                }
                 $discussion->save();
 
                 event( new \Viauco\Messenger\Events\DiscussionCreate( request()->all(), $discussion ) );
@@ -181,6 +188,22 @@ class DiscussionController extends Controller
             $record = new DiscussionItemResource( $discussion );
             $discussion->delete();
             return $this->_success( new DiscussionItemResource( $record ) );
+        }
+        catch(\Exception $e)
+        {
+            logger()->error( $e );
+
+            return $this->_error($e);
+        }
+    }
+
+    public function markAsRead($discussionId)
+    {
+        try
+        {
+            $discussion = Discussion::findOrFail($discussionId);
+            $discussion->markAsRead(auth()->user());
+            return $this->_success( new DiscussionItemResource( $discussion ) );
         }
         catch(\Exception $e)
         {
