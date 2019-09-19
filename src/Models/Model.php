@@ -3,7 +3,7 @@ namespace Viauco\Messenger\Models;
 
 use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 use Viauco\Messenger\Traits\Notifiable;
-
+use Jenssegers\Mongodb\Eloquent\HybridRelations;
 /**
  * Class     Model
  *
@@ -11,7 +11,7 @@ use Viauco\Messenger\Traits\Notifiable;
  */
 abstract class Model extends Eloquent
 {
-    use Notifiable;
+    use Notifiable, HybridRelations;
 
     /* -----------------------------------------------------------------
      |  Constructor

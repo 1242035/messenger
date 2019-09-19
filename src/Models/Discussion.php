@@ -156,6 +156,32 @@ class Discussion extends Model implements DiscussionContract
         return $this->hasOne(Message::class, Message::keyName(), 'last_message_id' );
     }
 
+    public function scopeOnlyUser(Builder $query, EloquentModel $participable)
+    {
+        $table = $this->getParticipationsTable();
+        $morph = config('messenger.users.morph', 'participable');
+        $id = $this->getQualifiedKeyName();
+        return $query->where( function(Builder $query) use($table, $morph, $participable, $id) {
+            return $query->aggregate([
+                    array( '$lookup' => array(
+                        'from' => $table,
+                        'localField' => '_id',
+                        'foreignField' => 'discussion_id',
+                        'as' => $table
+                    )),
+                    array( '$match' => array(
+                        '$and' => array(
+                            array( "{$morph}_type" => array( '$regex' => $participable->getMorphClass() ) ),
+                            array( "{$morph}_id" => array( '$regex' => $participable->getKey() ) ),
+                            array( 'deleted_at' => array( '$regex' => null ) )
+                        )
+                    )),
+                ]
+            );
+        });
+
+    }
+
     /* -----------------------------------------------------------------
      |  Scopes
      | -----------------------------------------------------------------
@@ -169,16 +195,19 @@ class Discussion extends Model implements DiscussionContract
      *
      * @return \Illuminate\Database\Eloquent\Builder|static
      */
+
     public function scopeForUser(Builder $query, EloquentModel $participable)
     {
+
         $table = $this->getParticipationsTable();
         return $query->join($table, function (JoinClause $join) use ($table, $participable) {
             $morph = config('messenger.users.morph', 'participable');
-            return $join->on($this->getQualifiedKeyName(), '=', "{$table}.discussion_id")
-                 ->where("{$table}.{$morph}_type", '=', $participable->getMorphClass())
-                 ->where("{$table}.{$morph}_id", '=', $participable->getKey())
-                 ->whereNull("{$table}.deleted_at");
+            $join->on($this->getQualifiedKeyName(), '=', "{$table}.discussion_id")
+                ->where("{$table}.{$morph}_type", '=', $participable->getMorphClass())
+                ->where("{$table}.{$morph}_id", '=', $participable->getKey())
+                ->whereNull("{$table}.deleted_at");
         });
+
     }
 
     /**

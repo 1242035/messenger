@@ -155,13 +155,37 @@ class DiscussionController extends Controller
             $userClass = config('messenger.users.model');
 
             $user = $userClass::findOrFail( $request->user_id );
+            $start = 0;
+            $limit = 100;
+            $morph = config('messenger.users.morph', 'participable');
+            $discussions = Discussion::raw(function($collection) use($user, $morph, $start, $limit) {
+                return $collection->aggregate([
+                    array( '$lookup' => array(
+                        'from' => 'participations',
+                        'localField' => '_id',
+                        'foreignField' => 'discussion_id',
+                        'as' => 'participations'
+                    )),
+                    array( '$match' => array(
+                        '$and' => array(
+                            array( "participations.{$morph}_type" => $user->getMorphClass() ),
+                            array( "participations.{$morph}_id" => $user->getKey() ),
+                            array( 'participations.deleted_at' => null )
+                        )
+                    )),
+                    array( '$skip' => $start ),
+                    array( '$limit' => $limit )
+                ]);
+            });
+
+            return response()->json( $discussions );
+            /*
             $discussions = Discussion::
-                notDeleted()
-                ->forUser($user)
+                forUser($user)
                 ->orderBy('updated_at','DESC')
                 ->simplePaginate((int)$params['per_page']);
-            
-            return $this->_success( new DiscussionCollection( $discussions )  );
+
+            return $this->_success( new DiscussionCollection( $discussions )  );*/
         }
         catch(\Exception $e)
         {
