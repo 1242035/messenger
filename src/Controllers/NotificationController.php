@@ -2,7 +2,7 @@
 namespace Viauco\Messenger\Controllers;
 
 use Viauco\Messenger\Models\Notification;
-use Viauco\Messenger\Resources\NotificationCollection as Resource;
+use Viauco\Messenger\Resources\NotificationCollection;
 
 class NotificationController extends Controller
 {

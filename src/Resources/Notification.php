@@ -12,9 +12,10 @@ class Notification extends Item
     public function toArray($request)
     {
         return [
-            'id'         => $this->_id,
-            'subject'    => $this->subject,
-            'body'       => $this->body,
+            'id'         => $this->id,
+            'data'       => $this->data,
+            //'type'       => $this->notifiable,
+            'readAt'     => $this->read_at,
             'createdAt'  => $this->created_at,
             'updatedAt'  => $this->updated_at,
         ];

@@ -9,10 +9,6 @@ class Message extends Base
         $this->data = $event;
     }
 
-    public function via($notifiable)
-    {
-        return ['database'];
-    }
     /**
      * Get the array representation of the notification.
      *
@@ -21,6 +17,24 @@ class Message extends Base
      */
     public function toArray($notifiable)
     {
-        return (array)$this->data;
+        return [
+            'id'   => $this->data->id,
+            'body' => $this->data->body,
+            'type' => $this->data->type
+        ];
+    }
+
+    public function toOneSignal($notifiable)
+    {
+        return OneSignalMessage::create()
+            ->subject("Your {$notifiable->service} account was approved!")
+            ->body("Click here to see details.")
+            ->url('http://onesignal.com')
+            ->webButton(
+                OneSignalWebButton::create('link-1')
+                    ->text('Click here')
+                    ->icon('https://upload.wikimedia.org/wikipedia/commons/4/4f/Laravel_logo.png')
+                    ->url('http://laravel.com')
+            );
     }
 }

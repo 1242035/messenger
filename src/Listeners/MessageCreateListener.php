@@ -24,12 +24,8 @@ class MessageCreateListener extends Base
 
             $discussion = \Viauco\Messenger\Models\Discussion::findOrFail($discussionId);
 
-            logger()->info('MessageCreateListener $discussion: ' .$discussion->id);
-
             if( isset( $discussion->id ) )
             {
-                //logger()->info('MessageCreateListener message: ' .json_encode($message));
-                //add last message to discussion member
 
                 $discussion->update([
                     'last_message_id' => $message->id
