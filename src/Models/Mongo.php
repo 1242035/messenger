@@ -1,8 +1,7 @@
 <?php
 namespace Viauco\Messenger\Models;
 
-//use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
-use Illuminate\Database\Eloquent\Model as Eloquent;
+use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 use Viauco\Messenger\Traits\Notifiable;
 use Jenssegers\Mongodb\Eloquent\HybridRelations;
 /**
@@ -10,7 +9,7 @@ use Jenssegers\Mongodb\Eloquent\HybridRelations;
  *
  * @package  Viauco\Messenger\Models
  */
-abstract class Model extends Eloquent
+abstract class Mongo extends Eloquent
 {
     use Notifiable, HybridRelations;
 

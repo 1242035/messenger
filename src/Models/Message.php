@@ -22,7 +22,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property  \Illuminate\Database\Eloquent\Collection       participations
  * @property  \Illuminate\Database\Eloquent\Collection       recipients
  */
-class Message extends Model implements MessageContract
+class Message extends Mongo implements MessageContract
 {
     use SoftDeletes;
     /* -----------------------------------------------------------------
@@ -61,8 +61,8 @@ class Message extends Model implements MessageContract
      */
     protected $casts = [
         'id'              => 'string',
-        'discussion_id'   => 'string',
-        'participable_id' => 'string',
+        'discussion_id'   => 'int',
+        'participable_id' => 'int',
     ];
 
     /* -----------------------------------------------------------------

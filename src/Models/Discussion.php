@@ -4,8 +4,8 @@ namespace Viauco\Messenger\Models;
 use Viauco\Messenger\Contracts\Discussion as DiscussionContract;
 use Viauco\Messenger\Contracts\Message as MessageContract;
 use Viauco\Messenger\Contracts\Participation as ParticipationContract;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Carbon;
@@ -136,6 +136,7 @@ class Discussion extends Model implements DiscussionContract
     {
         return $this->attachable();
     }
+
     /**
      * Participable relationship.
      *
@@ -174,6 +175,7 @@ class Discussion extends Model implements DiscussionContract
     {
 
         $table = $this->getParticipationsTable();
+        $query->orderBy($this->table.'.updated_at','DESC');
         return $query->join($table, function (JoinClause $join) use ($table, $participable) {
             $morph = config('messenger.users.morph', 'participable');
             $join->on($this->getQualifiedKeyName(), '=', "{$table}.discussion_id")

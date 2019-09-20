@@ -63,8 +63,9 @@ class Participation extends Model implements ParticipantContract
      * @var array
      */
     protected $casts = [
-        'id'              => 'string',
-        'participable_id' => 'string',
+        'id'              => 'int',
+        'participable_id' => 'int',
+        'last_message_id' => 'string'
     ];
 
     /* -----------------------------------------------------------------

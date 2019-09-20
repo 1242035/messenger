@@ -16,7 +16,7 @@ class Discussion extends Item
         $user = auth()->user();
         $author = $this->author;
         return [
-            'id'            => $this->_id,
+            'id'            => $this->id,
             'subject'       => $this->subject,
             'members'       => Participation::collection($participations),
             'author'        => isset($author) ? new User( $author ) : null,

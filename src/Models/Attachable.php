@@ -42,6 +42,8 @@ class Attachable extends Model implements AttachmentContract
     protected $fillable = [
         'attchable_type',
         'attachable_id',
+        'participable_type',
+        'participable_id',
         'discussion_id',
         'path',
         'mime',
@@ -64,8 +66,9 @@ class Attachable extends Model implements AttachmentContract
      * @var array
      */
     protected $casts = [
-        'id'              => 'string',
-        'attachable_id'   => 'string',
+        'id'              => 'int',
+        'attachable_id'   => 'int',
+        'participable_id' => 'int'
     ];
 
     /* -----------------------------------------------------------------

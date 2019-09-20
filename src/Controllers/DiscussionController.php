@@ -156,9 +156,7 @@ class DiscussionController extends Controller
 
             $user = $userClass::findOrFail( $request->user_id );
 
-            $discussions = Discussion::
-                forUser($user)
-                ->orderBy('updated_at','DESC')
+            $discussions = Discussion::forUser($user)
                 ->simplePaginate((int)$params['per_page']);
 
             return $this->_success( new DiscussionCollection( $discussions )  );

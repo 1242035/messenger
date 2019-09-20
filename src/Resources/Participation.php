@@ -13,7 +13,7 @@ class Participation extends Item
     public function toArray($request)
     {
         return [
-            'id'            => $this->_id,
+            'id'            => $this->id,
             'user'          => new User($this->participable),
             'discussionId' => $this->discussion_id,
             'lastOnline'   => $this->last_active,
