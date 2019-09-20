@@ -1,6 +1,10 @@
 <?php
 namespace Viauco\Messenger\Notifications;
 
+use NotificationChannels\OneSignal\OneSignalChannel;
+use NotificationChannels\OneSignal\OneSignalMessage;
+use NotificationChannels\OneSignal\OneSignalWebButton;
+
 class Message extends Base
 {
 

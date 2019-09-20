@@ -56,15 +56,7 @@ return [
             'limit'  => 25
         ]
     ],
-    'informations' => [
-        'table' => 'informations',
-        'model' => Viauco\Messenger\Models\Information::class,
-        'connection' => null,
-        'piginate' => [
-            'offset' => 0,
-            'limit'  => 25
-        ]
-    ],
+
     'notifications' => [
         'table' => 'notifications',
         'model' => Viauco\Messenger\Models\Notification::class,

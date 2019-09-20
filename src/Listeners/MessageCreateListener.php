@@ -35,18 +35,17 @@ class MessageCreateListener extends Base
 
                 if ( isset($participations) && count($participations) > 0 )
                 {
+                    $notify = new \Viauco\Messenger\Notifications\Message($message);
+
                     foreach ($participations as $participation)
                     {
                         $participation->last_message_id = $message->id;
                         $participation->save();
                         //push broadcast to member channel
                         event(new \Viauco\Messenger\Events\MessageCreateToMember($message, $discussion->id, $participation->participable->id));
+                        $participation->notify($notify);
                     }
                 }
-
-                $notify = new \Viauco\Messenger\Notifications\Message($event);
-
-                $message->notify($notify);
             }
         }
         //logger()->info('MessageCreateListener end');
