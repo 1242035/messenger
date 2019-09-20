@@ -40,7 +40,7 @@ class MessageCreateListener extends Base
                         $participation->last_message_id = $message->id;
                         $participation->save();
                         //push broadcast to member channel
-                        event(new \Viauco\Messenger\Events\MessageCreateToMember($message, $participation->participable->id));
+                        event(new \Viauco\Messenger\Events\MessageCreateToMember($message, $discussion->id, $participation->participable->id));
                     }
                 }
 

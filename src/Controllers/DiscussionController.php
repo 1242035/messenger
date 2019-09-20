@@ -1,6 +1,7 @@
 <?php
 namespace Viauco\Messenger\Controllers;
 
+use http\Env\Response;
 use Viauco\Messenger\Models\Discussion;
 use Viauco\Messenger\Resources\Discussion as DiscussionItemResource;
 use Viauco\Messenger\Resources\DiscussionCollection;
@@ -114,14 +115,21 @@ class DiscussionController extends Controller
                 $userClass = config('messenger.users.model');
 
                 $users = $userClass::whereIn(( new $userClass )->getKeyName(), $ids )->get();
-                foreach($users as $user){
-                    $arrMemberName[] = $user->fullName;
-                }
 
                 $discussion->addParticipants($users);
 
-                if( count( $arrMemberName ) > 0  ) {
-                    $discussion->subject = implode(', ', $arrMemberName);
+
+                if( isset( $request->subject ) && !empty( $request->subject ) )
+                {
+                    $discussion->subject = $request->subject;
+                }
+                else {
+                    foreach($users as $user) {
+                        $arrMemberName[] = $user->fullName;
+                    }
+                    if( count( $arrMemberName ) > 0  ) {
+                        $discussion->subject = implode(', ', $arrMemberName);
+                    }
                 }
                 $discussion->save();
 

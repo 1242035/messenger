@@ -20,7 +20,7 @@ class MessageController extends Controller
             if( ! isset( $params['per_page'] ) ){ $params['per_page'] = config('messenger.messages.piginate.limit'); }
             $params['page'] = isset( $params['page'] ) ? (int)$params['page'] : 1;
 
-            $discussion = Discussion::notDeleted()->findOrFail($discussionId);
+            $discussion = Discussion::findOrFail($discussionId);
 
             $messages = $discussion->messages()->where(function ($query) use ($params) {
                 if( isset( $params['time_end'] ) )
@@ -59,9 +59,11 @@ class MessageController extends Controller
 
             $message = Message::create($params);
 
-            $message->participable_id = request()->user()->id;
+            $currentUser = auth()->user();
 
-            $message->participable_type = request()->user()->getMorphClass();
+            $message->participable_id = $currentUser->id;
+
+            $message->participable_type = $currentUser->getMorphClass();
 
             if( isset( $params['attachments'] ) )
             {
@@ -69,6 +71,8 @@ class MessageController extends Controller
                 {
                     $attachable = new Attachable($attach);
                     $attachable->discussion_id = $discussion->id;
+                    $attachable->participable_id = $currentUser->id;
+                    $attachable->participable_type = $currentUser->getMorphClass();
                     $message->attachments()->save($attachable);
                 }
             }

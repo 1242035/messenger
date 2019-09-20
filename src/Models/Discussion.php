@@ -175,7 +175,8 @@ class Discussion extends Model implements DiscussionContract
     {
 
         $table = $this->getParticipationsTable();
-        $query->orderBy($this->table.'.updated_at','DESC');
+        $query->select($this->table. '.*')
+            ->orderBy($this->table.'.updated_at','DESC');
         return $query->join($table, function (JoinClause $join) use ($table, $participable) {
             $morph = config('messenger.users.morph', 'participable');
             $join->on($this->getQualifiedKeyName(), '=', "{$table}.discussion_id")

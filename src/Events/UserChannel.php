@@ -10,9 +10,12 @@ class UserChannel extends Broadcast
 
     public $type = 'notification';
 
-    public function __construct($data, $channel)
+    public $discussionId;
+
+    public function __construct($data, $discussionId, $channel)
     {
         $this->data      = $data;
+        $this->discussionId = $discussionId;
         $this->channel   = $channel;
     }
 

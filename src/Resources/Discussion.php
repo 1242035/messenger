@@ -13,6 +13,7 @@ class Discussion extends Item
     public function toArray($request)
     {
         $participations = $this->participations;
+
         $user = auth()->user();
         $author = $this->author;
         return [
