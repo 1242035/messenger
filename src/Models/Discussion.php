@@ -156,32 +156,6 @@ class Discussion extends Model implements DiscussionContract
         return $this->hasOne(Message::class, Message::keyName(), 'last_message_id' );
     }
 
-    public function scopeOnlyUser(Builder $query, EloquentModel $participable)
-    {
-        $table = $this->getParticipationsTable();
-        $morph = config('messenger.users.morph', 'participable');
-        $id = $this->getQualifiedKeyName();
-        return $query->where( function(Builder $query) use($table, $morph, $participable, $id) {
-            return $query->aggregate([
-                    array( '$lookup' => array(
-                        'from' => $table,
-                        'localField' => '_id',
-                        'foreignField' => 'discussion_id',
-                        'as' => $table
-                    )),
-                    array( '$match' => array(
-                        '$and' => array(
-                            array( "{$morph}_type" => array( '$regex' => $participable->getMorphClass() ) ),
-                            array( "{$morph}_id" => array( '$regex' => $participable->getKey() ) ),
-                            array( 'deleted_at' => array( '$regex' => null ) )
-                        )
-                    )),
-                ]
-            );
-        });
-
-    }
-
     /* -----------------------------------------------------------------
      |  Scopes
      | -----------------------------------------------------------------
