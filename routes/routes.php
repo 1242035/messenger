@@ -7,6 +7,7 @@ Route::group(['prefix' => '_conversations', 'namespace' => '\Viauco\Messenger\Co
         Route::get('/get_or_create', ['as' => 'viauco_messenger_discussions_getOrCreate_get', 'uses' => 'DiscussionController@discussionGetOrCreate']);
         Route::post('/get_or_create', ['as' => 'viauco_messenger_discussions_getOrCreate_post', 'uses' => 'DiscussionController@discussionGetOrCreate']);
         Route::get('/trash', ['as' => 'viauco_messenger_discussions_trash_get', 'uses' => 'DiscussionController@discussionGetTrash']);
+        Route::post('/mark_as_read_all', ['as' => 'viauco_messenger_discussions_mark_as_read_all_post', 'uses' => 'DiscussionController@markAsReadAll']);
 
         Route::post('/{discussionId}/participations/{participationId}', ['as' => 'viauco_messenger_discussions_participations_post', 'uses' => 'ParticipationController@participationPost']);
         Route::delete('/{discussionId}/participations/{participationId}', ['as' => 'viauco_messenger_discussions_participations_delete_id', 'uses' => 'ParticipationController@participationDelete']);
@@ -24,6 +25,7 @@ Route::group(['prefix' => '_conversations', 'namespace' => '\Viauco\Messenger\Co
         Route::delete('/{discussionId}/delete', ['as' => 'viauco_messenger_discussions_delete_delete', 'uses' => 'DiscussionController@forceDelete']);
         Route::post('/{discussionId}/restore', ['as' => 'viauco_messenger_discussions_restore', 'uses' => 'DiscussionController@discussionRestore']);
         Route::post('/{discussionId}/mark_as_read', ['as' => 'viauco_messenger_discussions_mark_as_read_post', 'uses' => 'DiscussionController@markAsRead']);
+
         Route::get('/{discussionId}', ['as' => 'viauco_messenger_discussions_get', 'uses' => 'DiscussionController@discussionGet']);
         Route::put('/{discussionId}', ['as' => 'viauco_messenger_discussions_put', 'uses' => 'DiscussionController@discussionPut']);
 
@@ -31,7 +33,11 @@ Route::group(['prefix' => '_conversations', 'namespace' => '\Viauco\Messenger\Co
 
     Route::group(['prefix' => 'notifications'], function ()
     {
+        Route::post('/search/by_user', ['as' => 'viauco_messenger_notifications_search_by_user', 'uses' => 'NotificationController@searchByUser']);
+        Route::post('/mark_as_read_all', ['as' => 'viauco_messenger_discussions_mark_as_read_all_post', 'uses' => 'NotificationController@markAsReadAll']);
+        Route::post('/{notificationId}/mark_as_read', ['as' => 'viauco_messenger_discussions_mark_as_read_post', 'uses' => 'NotificationController@markAsRead']);
         Route::get('/', ['as' => 'viauco_messenger_notifications_index', 'uses' => 'NotificationController@index']);
+
     });
 
     Route::post('/auth', ['as' => 'viauco_messenger_conversations_auth', 'uses' => 'BroadcastController@auth']);

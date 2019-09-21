@@ -29,7 +29,7 @@ class DiscussionController extends Controller
         {
             $params = request()->all();
 
-            if( ! isset( $params['per_page'] ) ){ $params['per_page'] = config('messenger.discussions.piginate.limit'); }
+            if( ! isset( $params['per_page'] ) ){ $params['per_page'] = config('messenger.discussions.paginate.limit'); }
             if( ! isset( $params['page'] ) ){ $params['page'] = 1; } else { $params['page'] = (int)$params['page']; }
             $discussions = Discussion::onlyTrashed()
                             ->orderBy('updated_at','DESC')
@@ -49,11 +49,12 @@ class DiscussionController extends Controller
     {
         try
         {
+
             $discussion->save();
 
             event( new \Viauco\Messenger\Events\DiscussionUpdate( request()->all(), $discussion ) );
 
-            return $this->_success( new DiscussionItemResource( $discussions ) );
+            return $this->_success( new DiscussionItemResource( $discussion ) );
         }
         catch(\Exception $e)
         {
@@ -157,7 +158,7 @@ class DiscussionController extends Controller
         {
             $params = request()->all();
 
-            if( ! isset( $params['per_page'] ) ){ $params['per_page'] = config('messenger.discussions.piginate.limit'); }
+            if( ! isset( $params['per_page'] ) ){ $params['per_page'] = config('messenger.discussions.paginate.limit'); }
             if( ! isset( $params['page'] ) ){ $params['page'] = 1; } else { $params['page'] = (int)$params['page']; }
 
             $userClass = config('messenger.users.model');
@@ -183,7 +184,7 @@ class DiscussionController extends Controller
         {
             $params = request()->all();
 
-            if( ! isset( $params['per_page'] ) ){ $params['per_page'] = config('messenger.discussions.piginate.limit'); }
+            if( ! isset( $params['per_page'] ) ){ $params['per_page'] = config('messenger.discussions.paginate.limit'); }
             if( ! isset( $params['page'] ) ){ $params['page'] = 1; } else { $params['page'] = (int)$params['page']; }
 
             $userClass = config('messenger.users.model');
@@ -271,6 +272,22 @@ class DiscussionController extends Controller
             $discussion = Discussion::findOrFail($discussionId);
             $discussion->markAsRead(auth()->user());
             return $this->_success( new DiscussionItemResource( $discussion ) );
+        }
+        catch(\Exception $e)
+        {
+            logger()->error( $e );
+
+            return $this->_error($e);
+        }
+    }
+
+    public function markAsReadAll()
+    {
+        try
+        {
+            $user = auth()->user();
+            Discussion::forUser( $user )->markAsRead($user );
+            return $this->_success([]);
         }
         catch(\Exception $e)
         {

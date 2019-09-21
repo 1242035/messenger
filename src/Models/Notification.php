@@ -4,6 +4,7 @@ namespace Viauco\Messenger\Models;
 use Viauco\Messenger\Contracts\Notification as NotificationContract;
 use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
+use Illuminate\Database\Eloquent\Builder;
 /**
  * Class     Discussion
  *
@@ -44,7 +45,8 @@ class Notification extends Model implements NotificationContract
      */
     protected $casts = [
         'data' => 'array',
-        'read_at' => 'datetime'
+        'read_at' => 'datetime',
+        'id'      => 'string'
     ];
 
     /**
@@ -104,7 +106,7 @@ class Notification extends Model implements NotificationContract
     public function scopeForModel(Builder $query, EloquentModel $model)
     {
         return $query->where("notifiable_type", '=', $model->getMorphClass())
-            ->where("notifiable_id", '=', $model->getKey()->toString());
+            ->where("notifiable_id", '=', (string)$model->getKey());
     }
     /**
      * Create a new database notification collection instance.

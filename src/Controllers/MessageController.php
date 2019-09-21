@@ -17,7 +17,7 @@ class MessageController extends Controller
         {
             $params = request()->all();
 
-            if( ! isset( $params['per_page'] ) ){ $params['per_page'] = config('messenger.messages.piginate.limit'); }
+            if( ! isset( $params['per_page'] ) ){ $params['per_page'] = config('messenger.messages.paginate.limit'); }
             $params['page'] = isset( $params['page'] ) ? (int)$params['page'] : 1;
 
             $discussion = Discussion::findOrFail($discussionId);

@@ -43,11 +43,10 @@ class MessageCreateListener extends Base
                         $participation->save();
                         //push broadcast to member channel
                         event(new \Viauco\Messenger\Events\MessageCreateToMember($message, $discussion->id, $participation->participable->id));
-                        $participation->notify($notify);
+                        $participation->user()->notify($notify);
                     }
                 }
             }
         }
-        //logger()->info('MessageCreateListener end');
     }
 }
