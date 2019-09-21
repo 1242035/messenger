@@ -31,10 +31,8 @@ class NotificationController extends Controller
             $notifications = auth()->user()
                             ->notifications()
                             ->orderBy('updated_at', 'DESC')
-                            ->simplePaginate((int)$params['per_page']);
-            /*$discussions = Notification::forModel(auth()->user())
-                ->orderBy('updated_at', 'DESC')
-                ->simplePaginate((int)$params['per_page']);*/
+                            ->paginate((int)$params['per_page']);
+            
             return $this->_success( new NotificationCollection( $notifications )  );
         }
         catch(\Exception $e)

@@ -24,7 +24,12 @@ class Message extends Base
         return [
             'id'   => $this->data->id,
             'body' => $this->data->body,
-            'type' => $this->data->type
+            'type' => $this->data->type,
+            'author' => [
+                'id' => $this->author->id,
+                'fullName' => $this->author->fullName,
+                'avatar' => $this->author->cover,
+            ]
         ];
     }
 

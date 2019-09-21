@@ -17,7 +17,12 @@ class Discussion extends Base
     {
         return [
             'id' => $this->data->id,
-            'subject' => $this->data->subject
+            'subject' => $this->data->subject,
+            'author' => [
+                'id' => $this->author->id,
+                'fullName' => $this->author->fullName,
+                'avatar' => $this->author->cover,
+            ]
         ];
     }
 

@@ -32,7 +32,13 @@ class Base extends Notification implements ShouldQueue
      */
     public function toArray($notifiable)
     {
-        return (array)$this->data;
+        $data = (array)$this->data;
+        $data['author'] = [
+            'id' => $notifiable->id,
+            'fullName' => $notifiable->fullName,
+            'avatar' => $notifiable->cover,
+        ];
+        return $data;
     }
 
     public function toOneSignal($notifiable)
