@@ -37,12 +37,12 @@ Route::group(['prefix' => '_conversations', 'namespace' => '\Viauco\Messenger\Co
         Route::post('/mark_as_read_all', ['as' => 'viauco_messenger_discussions_mark_as_read_all_post', 'uses' => 'NotificationController@markAsReadAll']);
         Route::post('/{notificationId}/mark_as_read', ['as' => 'viauco_messenger_discussions_mark_as_read_post', 'uses' => 'NotificationController@markAsRead']);
         Route::get('/', ['as' => 'viauco_messenger_notifications_index', 'uses' => 'NotificationController@index']);
-
     });
 
     Route::post('/auth', ['as' => 'viauco_messenger_conversations_auth', 'uses' => 'BroadcastController@auth']);
 
     Route::get('/search/by_user/trash', ['as' => 'viauco_messenger_discussions_chatted_by_user_trash_get', 'uses' => 'DiscussionController@searchTrashByUser']);
+    Route::post('/search/by_user/trash', ['as' => 'viauco_messenger_discussions_chatted_by_user_trash_post', 'uses' => 'DiscussionController@searchTrashByUser']);
     Route::post('/search/by_user', ['as' => 'viauco_messenger_discussions_chatted_by_user_post', 'uses' => 'DiscussionController@searchByUser']);
     Route::get('/search/by_user', ['as' => 'viauco_messenger_discussions_chatted_by_user_get', 'uses' => 'DiscussionController@searchByUser']);
 
