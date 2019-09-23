@@ -17,10 +17,10 @@ class MessageController extends Controller
         {
             $params = request()->all();
 
-            if( ! isset( $params['per_page'] ) ){ $params['per_page'] = config('messenger.messages.piginate.limit'); }
+            if( ! isset( $params['per_page'] ) ){ $params['per_page'] = config('messenger.messages.paginate.limit'); }
             $params['page'] = isset( $params['page'] ) ? (int)$params['page'] : 1;
 
-            $discussion = Discussion::notDeleted()->findOrFail($discussionId);
+            $discussion = Discussion::findOrFail($discussionId);
 
             $messages = $discussion->messages()->where(function ($query) use ($params) {
                 if( isset( $params['time_end'] ) )
@@ -59,22 +59,25 @@ class MessageController extends Controller
 
             $message = Message::create($params);
 
-            $message->participable_id = request()->user()->id;
+            $currentUser = auth()->user();
 
-            $message->participable_type = request()->user()->getMorphClass();
+            $message->participable_id = $currentUser->id;
 
-            $discussion->messages()->save( $message );
+            $message->participable_type = $currentUser->getMorphClass();
 
             if( isset( $params['attachments'] ) )
             {
-
                 foreach ( $params['attachments'] as $key => $attach)
                 {
                     $attachable = new Attachable($attach);
                     $attachable->discussion_id = $discussion->id;
+                    $attachable->participable_id = $currentUser->id;
+                    $attachable->participable_type = $currentUser->getMorphClass();
                     $message->attachments()->save($attachable);
                 }
             }
+
+            $discussion->messages()->save( $message );
 
             $parsedMessage = new MessageItemResource( $message );
 

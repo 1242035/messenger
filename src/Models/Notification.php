@@ -1,9 +1,11 @@
-<?php 
+<?php
 namespace Viauco\Messenger\Models;
 
 use Viauco\Messenger\Contracts\Notification as NotificationContract;
 use Illuminate\Notifications\DatabaseNotificationCollection;
-/** 
+use Illuminate\Database\Eloquent\Model as EloquentModel;
+use Illuminate\Database\Eloquent\Builder;
+/**
  * Class     Discussion
  *
  * @package  Viauco\Messenger\Models
@@ -21,7 +23,7 @@ class Notification extends Model implements NotificationContract
     {
 
         parent::__construct($attributes);
-        
+
         if( null !== config('messenger.notifications.connection') )
         {
             $this->setConnection(config('messenger.notifications.connection'));
@@ -43,7 +45,8 @@ class Notification extends Model implements NotificationContract
      */
     protected $casts = [
         'data' => 'array',
-        'read_at' => 'datetime'
+        'read_at' => 'datetime',
+        'id'      => 'string'
     ];
 
     /**
@@ -61,7 +64,7 @@ class Notification extends Model implements NotificationContract
      */
     public function markAsRead()
     {
-        if (is_null($this->read_at)) 
+        if (is_null($this->read_at))
         {
             $this->forceFill(['read_at' => $this->freshTimestamp()])->save();
         }
@@ -74,7 +77,7 @@ class Notification extends Model implements NotificationContract
      */
     public function markAsUnread()
     {
-        if (! is_null($this->read_at)) 
+        if (! is_null($this->read_at))
         {
             $this->forceFill(['read_at' => null])->save();
         }
@@ -100,6 +103,11 @@ class Notification extends Model implements NotificationContract
         return $this->read_at === null;
     }
 
+    public function scopeForModel(Builder $query, EloquentModel $model)
+    {
+        return $query->where("notifiable_type", '=', $model->getMorphClass())
+            ->where("notifiable_id", '=', (string)$model->getKey());
+    }
     /**
      * Create a new database notification collection instance.
      *

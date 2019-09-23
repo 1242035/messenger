@@ -32,7 +32,7 @@ return [
         'table' => 'participations',
         'model' => Viauco\Messenger\Models\Participation::class,
         'connection' => null,
-        'piginate' => [
+        'paginate' => [
             'offset' => 0,
             'limit'  => 25
         ]
@@ -42,7 +42,7 @@ return [
         'table' => 'messages',
         'model' => Viauco\Messenger\Models\Message::class,
         'connection' => null,
-        'piginate' => [
+        'paginate' => [
             'offset' => 0,
             'limit'  => 25
         ]
@@ -51,25 +51,17 @@ return [
         'table' => 'attachments',
         'model' => Viauco\Messenger\Models\Attachable::class,
         'connection' => null,
-        'piginate' => [
+        'paginate' => [
             'offset' => 0,
             'limit'  => 25
         ]
     ],
-    'informations' => [
-        'table' => 'informations',
-        'model' => Viauco\Messenger\Models\Information::class,
-        'connection' => null,
-        'piginate' => [
-            'offset' => 0,
-            'limit'  => 25
-        ]
-    ],
+
     'notifications' => [
         'table' => 'notifications',
         'model' => Viauco\Messenger\Models\Notification::class,
         'connection' => null,
-        'piginate' => [
+        'paginate' => [
             'offset' => 0,
             'limit'  => 25
         ]

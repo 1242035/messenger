@@ -24,12 +24,8 @@ class MessageCreateListener extends Base
 
             $discussion = \Viauco\Messenger\Models\Discussion::findOrFail($discussionId);
 
-            logger()->info('MessageCreateListener $discussion: ' .$discussion->id);
-
             if( isset( $discussion->id ) )
             {
-                //logger()->info('MessageCreateListener message: ' .json_encode($message));
-                //add last message to discussion member
 
                 $discussion->update([
                     'last_message_id' => $message->id
@@ -39,20 +35,18 @@ class MessageCreateListener extends Base
 
                 if ( isset($participations) && count($participations) > 0 )
                 {
+                    $notify = new \Viauco\Messenger\Notifications\Message($message);
+
                     foreach ($participations as $participation)
                     {
                         $participation->last_message_id = $message->id;
                         $participation->save();
                         //push broadcast to member channel
-                        event(new \Viauco\Messenger\Events\MessageCreateToMember($message, $participation->participable->id));
+                        event(new \Viauco\Messenger\Events\MessageCreateToMember($message, $discussion->id, $participation->participable->id));
+                        $participation->user()->notify($notify);
                     }
                 }
-
-                $notify = new \Viauco\Messenger\Notifications\Message($event);
-
-                $message->notify($notify);
             }
         }
-        //logger()->info('MessageCreateListener end');
     }
 }

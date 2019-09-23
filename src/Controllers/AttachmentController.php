@@ -13,7 +13,7 @@ class AttachmentController extends Controller
         {
             $params = request()->all();
 
-            if( ! isset( $params['per_page'] ) ){ $params['per_page'] = config('messenger.attachments.piginate.limit', 25); }
+            if( ! isset( $params['per_page'] ) ){ $params['per_page'] = config('messenger.attachments.paginate.limit', 25); }
             if( ! isset( $params['page'] ) ){ $params['page'] = 1; } else { $params['page'] = (int)$params['page']; }
 
             $type = null;

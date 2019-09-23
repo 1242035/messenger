@@ -15,9 +15,6 @@ class PresenceUnsubscribeListener extends Base
      */
     public function handle(PresenceUnsubscribe $event)
     {
-        logger()->info('PresenceUnsubscribeListener start');
-
-
         $connection = $event->connection;
         $payload    = $event->request;
 
@@ -38,13 +35,12 @@ class PresenceUnsubscribeListener extends Base
                     $userId       = $connectionInfo->id;
                     //logger()->error('PresenceUnsubscribeListener connectionInfo :' . $discussionId . ' => ' . $userId);
 
-                    $discussion = Discussion::notDeleted()->findOrFail( $discussionId );
+                    $discussion = Discussion::findOrFail( $discussionId );
                     $participations = $discussion->participations;
                     foreach($participations as $participation)
                     {
                         if( $participation->participable->id == $userId )
                         {
-                            logger()->error('PresenceUnsubscribeListener participation', ['exception' => $participation]);
                             $participation->last_active = now();
                             $participation->save();
                             break;
@@ -58,7 +54,5 @@ class PresenceUnsubscribeListener extends Base
                 logger()->error('PresenceUnsubscribeListener error: ', ['exception' => $e]);
             }
         }
-
-        logger()->info('PresenceUnsubscribeListener end');
     }
 }

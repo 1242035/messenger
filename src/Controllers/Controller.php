@@ -16,7 +16,7 @@ abstract class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests, Notifiable;
 
-    public function __construct() 
+    public function __construct()
     {
         //$this->middleware('auth');
     }
@@ -30,12 +30,22 @@ abstract class Controller extends BaseController
             'message' => 'Success',
             'data'    => $data
         ];
-        //if( isset( $data['meta'])){ $response['meta'] = $data['meta']; }
-        //if( isset( $data['links'])){ $response['links'] = $data['links']; }
         return response()->json( $response );
     }
 
     protected function _error($error = null, $code = 500, $type = 'error', $message='error')
+    {
+        return response()->json([
+            'success' => false,
+            'code'    => $code,
+            'type'    => $type,
+            'message' => $message,
+            'params'  => request()->all(),
+            'error'   => $error
+        ]);
+    }
+
+    protected function _permissionDeny($error = null, $code = 403, $type = 'error', $message='permission deny')
     {
         return response()->json([
             'success' => false,

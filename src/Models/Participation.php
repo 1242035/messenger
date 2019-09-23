@@ -3,6 +3,8 @@ namespace Viauco\Messenger\Models;
 
 use Viauco\Messenger\Contracts\Participation as ParticipantContract;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model as EloquentModel;
 
 /**
  * Class     Participant
@@ -61,8 +63,9 @@ class Participation extends Model implements ParticipantContract
      * @var array
      */
     protected $casts = [
-        'id'              => 'string',
-        'participable_id' => 'string',
+        'id'              => 'int',
+        'participable_id' => 'int',
+        'last_message_id' => 'string'
     ];
 
     /* -----------------------------------------------------------------
@@ -119,6 +122,16 @@ class Participation extends Model implements ParticipantContract
     public function participable()
     {
         return $this->morphTo();
+    }
+
+    public function scopeForUser(Builder $query, EloquentModel $participable)
+    {
+        $morph = config('messenger.users.morph', 'participable');
+
+        return $query
+            ->where("{$morph}_type", '=', $participable->getMorphClass())
+            ->where("{$morph}_id", '=', $participable->getKey())
+            ->whereNull("deleted_at");
     }
 
     /* -----------------------------------------------------------------

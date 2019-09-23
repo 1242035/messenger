@@ -14,15 +14,15 @@ class User extends Item
     {
         return [
             'id'         => $this->id,
-            'email'      => $this->email,
-            'firstName' => $this->first_name,
-            'lastName'  => $this->last_name,
+            //'email'      => $this->email,
+            //'firstName' => $this->first_name,
+            //'lastName'  => $this->last_name,
             'fullName'  => $this->first_name . ' ' . $this->last_name,
             'avatar'     => $this->cover,
-            'birthday'   => $this->birthday,
-            'type'       => $this->type_register,
-            'createdAt' => $this->created_at,
-            'updatedAt' => $this->updated_at,
+            //'birthday'   => $this->birthday,
+            //'type'       => $this->type_register,
+            //'createdAt' => $this->created_at,
+            //'updatedAt' => $this->updated_at,
         ];
     }
 }

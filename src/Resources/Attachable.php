@@ -13,7 +13,7 @@ class Attachable extends Item
     public function toArray($request)
     {
         return [
-            'id'         => $this->_id,
+            'id'         => $this->id,
             'path'       => $this->path,
             'url'        => config('settings.config_storage_domain') . $this->path,
             'mime'       => $this->mime,
@@ -21,6 +21,7 @@ class Attachable extends Item
             'type'       => $this->type,
             'ext'        => $this->ext,
             'origin'     => $this->origin,
+            'author'     => new User( $this->author )
         ];
     }
 }

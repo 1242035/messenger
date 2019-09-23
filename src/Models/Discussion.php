@@ -4,8 +4,8 @@ namespace Viauco\Messenger\Models;
 use Viauco\Messenger\Contracts\Discussion as DiscussionContract;
 use Viauco\Messenger\Contracts\Message as MessageContract;
 use Viauco\Messenger\Contracts\Participation as ParticipationContract;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Carbon;
@@ -67,7 +67,10 @@ class Discussion extends Model implements DiscussionContract
      *
      * @var array
      */
-
+    protected $casts = [
+        'last_message_id' => 'string',
+        'ids' => 'string'
+    ];
     /* -----------------------------------------------------------------
      |  Constructor
      | -----------------------------------------------------------------
@@ -133,6 +136,7 @@ class Discussion extends Model implements DiscussionContract
     {
         return $this->attachable();
     }
+
     /**
      * Participable relationship.
      *
@@ -166,18 +170,21 @@ class Discussion extends Model implements DiscussionContract
      *
      * @return \Illuminate\Database\Eloquent\Builder|static
      */
+
     public function scopeForUser(Builder $query, EloquentModel $participable)
     {
-        $table = $this->getParticipationsTable();
 
+        $table = $this->getParticipationsTable();
+        $query->select($this->table. '.*')
+            ->orderBy($this->table.'.updated_at','DESC');
         return $query->join($table, function (JoinClause $join) use ($table, $participable) {
             $morph = config('messenger.users.morph', 'participable');
-
             $join->on($this->getQualifiedKeyName(), '=', "{$table}.discussion_id")
-                 ->where("{$table}.{$morph}_type", '=', $participable->getMorphClass())
-                 ->where("{$table}.{$morph}_id", '=', $participable->getKey())
-                 ->whereNull("{$table}.deleted_at");
+                ->where("{$table}.{$morph}_type", '=', $participable->getMorphClass())
+                ->where("{$table}.{$morph}_id", '=', $participable->getKey())
+                ->whereNull("{$table}.deleted_at");
         });
+
     }
 
     /**
@@ -413,6 +420,7 @@ class Discussion extends Model implements DiscussionContract
      */
     public function markAsRead(EloquentModel $participable)
     {
+
         if ($participant = $this->getParticipationByParticipable($participable)) {
             return $participant->update(['last_read' => Carbon::now()]);
         }
